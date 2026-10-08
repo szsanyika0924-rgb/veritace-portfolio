@@ -37,6 +37,27 @@
         .nav { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
         .brand { font-weight: 800; letter-spacing: .04em; text-decoration: none; }
         .nav a:last-child { color: var(--mint); text-decoration: none; }
+        .back-home {
+            display: inline-flex;
+            min-height: 42px;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            border: 1px solid rgba(155, 231, 212, .48);
+            border-radius: 999px;
+            background: rgba(155, 231, 212, .11);
+            color: var(--mint);
+            font-size: .85rem;
+            font-weight: 800;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+        }
+        .back-home:hover {
+            transform: translateY(-1px);
+            border-color: var(--mint);
+            background: rgba(155, 231, 212, .2);
+        }
         .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 54px; align-items: center; padding-block: clamp(56px, 9vw, 112px); }
         .eyebrow, .label { color: var(--mint); font-size: .76rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
         h1, h2, h3, p { margin-top: 0; }
@@ -81,6 +102,7 @@
         details p { margin: 10px 0 0; color: var(--muted); }
         footer { padding: 28px 0 42px; border-top: 1px solid var(--line); color: var(--muted); font-size: .83rem; }
         @media (max-width: 760px) {
+            .nav { flex-wrap: wrap; padding-block: 8px; }
             .hero, .cart { grid-template-columns: 1fr; }
             .hero { gap: 32px; }
             .product-grid { grid-template-columns: 1fr; }
@@ -93,7 +115,7 @@
     <header class="topbar">
         <nav class="nav wrap" aria-label="Main navigation">
             <a class="brand" href="./guide.html">Rental Profit Snapshot</a>
-            <a href="#products">What's included</a>
+            <a class="back-home" href="index.html">← Back to Portfolio</a>
         </nav>
     </header>
     <main>

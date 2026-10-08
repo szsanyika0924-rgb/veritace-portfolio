@@ -108,6 +108,28 @@
             backdrop-filter: blur(18px);
         }
 
+        .back-home {
+            display: inline-flex;
+            min-height: 42px;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            border: 1px solid rgba(201, 162, 255, .48);
+            border-radius: 999px;
+            background: rgba(156, 112, 245, .12);
+            color: #e2ccff;
+            font-size: .84rem;
+            font-weight: 750;
+            white-space: nowrap;
+            transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+        }
+
+        .back-home:hover {
+            transform: translateY(-1px);
+            border-color: var(--accent);
+            background: rgba(156, 112, 245, .22);
+        }
+
         .nav {
             display: flex;
             min-height: 76px;
@@ -966,13 +988,17 @@
 
             .nav {
                 min-height: 68px;
+                flex-wrap: wrap;
+                padding-block: 8px;
             }
 
             .nav-links {
-                gap: 14px;
+                flex: 1 0 100%;
+                justify-content: space-between;
+                gap: 10px;
             }
 
-            .nav-links a {
+            .nav-links a:not(.back-home) {
                 display: none;
             }
 
@@ -1103,6 +1129,7 @@
                 <span>VEILBOUND <span aria-hidden="true">/</span> RELIC EXCHANGE</span>
             </a>
             <div class="nav-links">
+                <a class="back-home" href="index.html">← Back to Portfolio</a>
                 <a href="#catalog">A relikviák</a>
                 <a href="#about">Az archívumról</a>
                 <button class="cart-trigger" id="openCart" type="button" aria-label="Relikviák megnyitása, 0 tétel">

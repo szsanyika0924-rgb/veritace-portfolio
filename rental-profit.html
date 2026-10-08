@@ -124,6 +124,28 @@
             font-size: .8rem;
         }
 
+        .back-home {
+            display: inline-flex;
+            min-height: 42px;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            border: 1px solid rgba(137, 234, 213, .42);
+            border-radius: 999px;
+            background: rgba(137, 234, 213, .1);
+            color: var(--mint);
+            font-size: .86rem;
+            font-weight: 750;
+            white-space: nowrap;
+            transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+        }
+
+        .back-home:hover {
+            transform: translateY(-1px);
+            border-color: var(--mint);
+            background: rgba(137, 234, 213, .18);
+        }
+
         .hero {
             display: grid;
             grid-template-columns: minmax(0, .95fr) minmax(390px, 1.05fr);
@@ -914,12 +936,17 @@
             }
 
             .nav {
+                flex-wrap: wrap;
                 min-height: 62px;
+                padding-block: 8px;
             }
 
             .nav-note {
-                max-width: 165px;
-                text-align: right;
+                display: none;
+            }
+
+            .back-home {
+                margin-left: auto;
             }
 
             .hero {
@@ -1012,7 +1039,8 @@
                 </span>
                 Rental Profit Snapshot
             </a>
-            <span class="nav-note">Simple tools for clearer hosting decisions</span>
+            <div class="nav-note">Simple tools for clearer hosting decisions</div>
+            <a class="back-home" href="index.html">← Back to Portfolio</a>
         </nav>
     </header>
 
@@ -1167,7 +1195,7 @@
                             <strong id="checkout-total" aria-live="polite">$19</strong>
                         </div>
                         <span class="discount-tag" id="bundle-discount" hidden>Bundle price · Save $8</span>
-                        <button class="button button-primary" id="checkout-button" type="button">Secure Your Toolkit <span aria-hidden="true">→</span></button>
+                        <a class="button button-primary" id="checkout-button" href="mailto:alexander.sabo.business@gmail.com">Secure Your Toolkit <span aria-hidden="true">→</span></a>
                         <p class="checkout-disclosure"><strong>Email order request, not card checkout.</strong> This button opens a pre-filled email draft. No payment is collected here; payment and delivery are arranged after we reply. Never email card details.</p>
                     </aside>
                 </div>

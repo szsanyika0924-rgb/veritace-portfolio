@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "gehrmans-nexus-v12";
+const CACHE_NAME = "gehrmans-nexus-v13";
 const APP_FILES = [
     "./index.html",
     "./snake.html",
