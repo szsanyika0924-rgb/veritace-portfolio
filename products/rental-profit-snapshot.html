@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#14201d">
+    <meta name="description" content="A private, browser-based monthly rental income and expense snapshot.">
+    <title>Rental Profit Snapshot — Offline calculator</title>
+    <style>
+        :root { color-scheme: light; --ink:#182722; --muted:#52635b; --line:#d6e0d9; --mint:#dff4eb; --paper:#f6f8f5; }
+        * { box-sizing:border-box; }
+        body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+        main { width:min(960px,calc(100% - 32px)); margin:32px auto; }
+        h1 { margin:0 0 8px; font-size:clamp(2rem,5vw,3rem); letter-spacing:-.05em; line-height:1.1; }
+        h2 { margin:0 0 14px; font-size:1.15rem; }
+        p { color:var(--muted); }
+        .top { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:24px; }
+        .actions { display:flex; flex-wrap:wrap; gap:8px; }
+        button,select,input { font:inherit; }
+        button { min-height:42px; padding:8px 13px; border:1px solid #9aaca2; border-radius:10px; background:white; color:var(--ink); cursor:pointer; }
+        button:hover { background:var(--mint); }
+        .layout { display:grid; grid-template-columns:1fr .85fr; gap:18px; align-items:start; }
+        .card { padding:22px; border:1px solid var(--line); border-radius:16px; background:#fff; }
+        .fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        label { display:grid; gap:6px; color:var(--muted); font-size:.9rem; }
+        input,select { width:100%; min-height:44px; padding:9px 10px; border:1px solid #aebbb3; border-radius:9px; background:white; color:var(--ink); }
+        .result { padding:16px 0; border-bottom:1px solid var(--line); }
+        .result:last-of-type { border:0; }
+        .result span { display:block; color:var(--muted); font-size:.88rem; }
+        .result strong { font-size:1.8rem; font-variant-numeric:tabular-nums; }
+        .highlight { padding:18px; border-radius:12px; background:var(--mint); }
+        .highlight strong { font-size:2rem; }
+        .status { min-height:1.5em; font-size:.85rem; }
+        footer { margin-top:22px; font-size:.85rem; }
+        @media(max-width:700px) { .top,.layout { display:grid; grid-template-columns:1fr; } .fields { grid-template-columns:1fr; } }
+        @media print { body { background:white; } main { width:100%; margin:0; } .actions { display:none; } }
+    </style>
+</head>
+<body>
+<main>
+    <header class="top">
+        <div><p><strong>MONTHLY HOST CHECK</strong></p><h1>Rental Profit Snapshot</h1><p>Enter one month's figures for a quick estimate. Your entries stay in this browser on this device.</p></div>
+        <div class="actions"><button id="print-button" type="button">Print / save PDF</button><button id="reset-button" type="button">Clear figures</button></div>
+    </header>
+    <div class="layout">
+        <section class="card" aria-labelledby="inputs-heading">
+            <h2 id="inputs-heading">Your monthly figures</h2>
+            <div class="fields">
+                <label for="currency">Currency
+                    <select id="currency"><option value="USD">USD — US dollar</option><option value="EUR">EUR — euro</option><option value="GBP">GBP — pound sterling</option><option value="HUF">HUF — Hungarian forint</option></select>
+                </label>
+                <label for="income">Booking income
+                    <input id="income" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0">
+                </label>
+                <label for="platform-fees">Platform and payment fees
+                    <input id="platform-fees" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0">
+                </label>
+                <label for="cleaning">Cleaning
+                    <input id="cleaning" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0">
+                </label>
+                <label for="supplies">Supplies and repairs
+                    <input id="supplies" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0">
+                </label>
+                <label for="fixed-costs">Other operating costs
+                    <input id="fixed-costs" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0">
+                </label>
+                <label for="nights">Nights booked (optional)
+                    <input id="nights" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+                </label>
+            </div>
+            <p id="storage-status" class="status" role="status">Figures are calculated in this page, not sent to a server.</p>
+        </section>
+        <section class="card" aria-labelledby="results-heading" aria-live="polite">
+            <h2 id="results-heading">This month's estimate</h2>
+            <div class="result"><span>Total costs entered</span><strong id="cost-result">$0</strong></div>
+            <div class="highlight"><span>Estimated amount kept</span><br><strong id="profit-result">$0</strong></div>
+            <div class="result"><span>Estimated amount kept per booked night</span><strong id="night-result">—</strong></div>
+            <div class="result"><span>Amount kept as share of income</span><strong id="margin-result">—</strong></div>
+        </section>
+    </div>
+    <footer><p>This is a simple estimate from figures you provide, not bookkeeping, tax, legal, or investment advice. It does not account for every local rule or cost. Check your records before making business decisions.</p></footer>
+</main>
+<script>
+    "use strict";
+    const fields = ["currency", "income", "platform-fees", "cleaning", "supplies", "fixed-costs", "nights"];
+    const formatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 });
+    const status = document.getElementById("storage-status");
+
+    function readAmount(id) {
+        const value = document.getElementById(id).value;
+        return value === "" ? 0 : Number(value);
+    }
+
+    function recalculate() {
+        const invalidField = fields.slice(1)
+            .map(id => document.getElementById(id))
+            .find(input => !input.validity.valid);
+        if (invalidField) {
+            status.textContent = `Enter a valid, non-negative value for ${invalidField.labels[0].textContent}.`;
+            return;
+        }
+        const currency = document.getElementById("currency").value;
+        const income = readAmount("income");
+        const costs = ["platform-fees", "cleaning", "supplies", "fixed-costs"].reduce((sum, id) => sum + readAmount(id), 0);
+        const nights = readAmount("nights");
+        const profit = income - costs;
+        const currencyFormatter = new Intl.NumberFormat(undefined, { style: "currency", currency, maximumFractionDigits: currency === "HUF" ? 0 : 2 });
+        document.getElementById("cost-result").textContent = currencyFormatter.format(costs);
+        document.getElementById("profit-result").textContent = currencyFormatter.format(profit);
+        document.getElementById("night-result").textContent = nights > 0 ? currencyFormatter.format(profit / nights) : "—";
+        document.getElementById("margin-result").textContent = income > 0 ? `${formatter.format(profit / income * 100)}%` : "—";
+        save();
+    }
+
+    function save() {
+        const values = Object.fromEntries(fields.map(id => [id, document.getElementById(id).value]));
+        try {
+            localStorage.setItem("rental-profit-snapshot-v1", JSON.stringify(values));
+            status.textContent = "Saved locally in this browser.";
+        } catch (error) {
+            status.textContent = `Could not save locally: ${error.message}`;
+        }
+    }
+
+    try {
+        const saved = JSON.parse(localStorage.getItem("rental-profit-snapshot-v1") || "{}");
+        fields.forEach(id => {
+            if (typeof saved[id] === "string") document.getElementById(id).value = saved[id];
+        });
+    } catch (error) {
+        status.textContent = `Could not restore saved figures: ${error.message}`;
+    }
+    fields.forEach(id => document.getElementById(id).addEventListener("input", recalculate));
+    document.getElementById("print-button").addEventListener("click", () => window.print());
+    document.getElementById("reset-button").addEventListener("click", () => {
+        fields.forEach(id => { document.getElementById(id).value = ""; });
+        document.getElementById("currency").value = "USD";
+        recalculate();
+    });
+    recalculate();
+</script>
+</body>
+</html>

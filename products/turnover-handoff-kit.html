@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#14201d">
+    <meta name="description" content="Editable short-term-rental turnover checklist and cleaner handoff notes.">
+    <title>Turnover Handoff Kit — Editable checklist</title>
+    <style>
+        :root { color-scheme: light; --ink:#182722; --muted:#52635b; --line:#d6e0d9; --mint:#dff4eb; --paper:#f6f8f5; }
+        * { box-sizing:border-box; }
+        body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+        main { width:min(900px,calc(100% - 32px)); margin:28px auto; }
+        header,.section,.notes { padding:20px; border:1px solid var(--line); border-radius:14px; background:white; }
+        header { margin-bottom:15px; }
+        h1 { margin:0 0 6px; font-size:clamp(1.9rem,5vw,2.8rem); letter-spacing:-.05em; }
+        h2 { margin:0 0 12px; font-size:1.12rem; }
+        p { color:var(--muted); }
+        button,input,textarea { font:inherit; }
+        input[type=text],input[type=date],textarea { width:100%; min-height:42px; padding:9px; border:1px solid #aebbb3; border-radius:8px; }
+        label.field { display:grid; gap:5px; color:var(--muted); font-size:.9rem; }
+        .fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:15px; }
+        button { min-height:42px; padding:8px 13px; border:1px solid #9aaca2; border-radius:9px; background:white; color:var(--ink); cursor:pointer; }
+        button:hover { background:var(--mint); }
+        .section { margin:14px 0; }
+        ul { display:grid; gap:9px; margin:0; padding:0; list-style:none; }
+        li { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:10px; }
+        input[type=checkbox] { width:19px; height:19px; accent-color:#397961; }
+        .notes { margin-top:14px; }
+        textarea { min-height:100px; resize:vertical; }
+        .status { min-height:1.5em; font-size:.85rem; }
+        @media(max-width:580px) { .fields { grid-template-columns:1fr; } }
+        @media print { body { background:white; } main { width:100%; margin:0; } .actions,.status { display:none; } header,.section,.notes { break-inside:avoid; } input,textarea { border:0; padding-left:0; } }
+    </style>
+</head>
+<body>
+<main>
+    <header>
+        <p><strong>TURNOVER HANDOFF KIT</strong></p>
+        <h1>Reset the space. Hand it back clearly.</h1>
+        <p>Edit any task to match your property and cleaning agreement. Check items as you go; your edits stay in this browser on this device.</p>
+        <div class="fields">
+            <label class="field" for="property">Property / unit<input id="property" type="text" placeholder="Property name"></label>
+            <label class="field" for="turnover-date">Turnover date<input id="turnover-date" type="date"></label>
+            <label class="field" for="cleaner">Prepared by<input id="cleaner" type="text" placeholder="Name"></label>
+            <label class="field" for="arrival-time">Next arrival time<input id="arrival-time" type="text" placeholder="e.g. 4:00 PM"></label>
+        </div>
+        <div class="actions"><button id="print-button" type="button">Print / save PDF</button><button id="reset-button" type="button">Reset checklist</button></div>
+        <p id="save-status" class="status" role="status">Checklist is stored only in this browser.</p>
+    </header>
+
+    <section class="section"><h2>Arrival and first impression</h2><ul>
+        <li><input id="t1" type="checkbox" aria-label="Complete task 1"><input data-task="t1" type="text" aria-label="Task 1 description" value="Confirm the previous guest has checked out."></li>
+        <li><input id="t2" type="checkbox" aria-label="Complete task 2"><input data-task="t2" type="text" aria-label="Task 2 description" value="Air out rooms and check for visible damage or forgotten belongings."></li>
+        <li><input id="t3" type="checkbox" aria-label="Complete task 3"><input data-task="t3" type="text" aria-label="Task 3 description" value="Check entry instructions and confirm the access method works."></li>
+    </ul></section>
+    <section class="section"><h2>Kitchen and dining</h2><ul>
+        <li><input id="t4" type="checkbox" aria-label="Complete task 4"><input data-task="t4" type="text" aria-label="Task 4 description" value="Clean counters, sink, stovetop, and appliance touchpoints."></li>
+        <li><input id="t5" type="checkbox" aria-label="Complete task 5"><input data-task="t5" type="text" aria-label="Task 5 description" value="Wash, dry, and put away dishes; check cookware and utensils."></li>
+        <li><input id="t6" type="checkbox" aria-label="Complete task 6"><input data-task="t6" type="text" aria-label="Task 6 description" value="Remove food waste and restock the agreed basic supplies."></li>
+    </ul></section>
+    <section class="section"><h2>Bathroom and bedrooms</h2><ul>
+        <li><input id="t7" type="checkbox" aria-label="Complete task 7"><input data-task="t7" type="text" aria-label="Task 7 description" value="Clean bathroom surfaces, mirror, shower, and toilet."></li>
+        <li><input id="t8" type="checkbox" aria-label="Complete task 8"><input data-task="t8" type="text" aria-label="Task 8 description" value="Replace towels and check the agreed bathroom supplies."></li>
+        <li><input id="t9" type="checkbox" aria-label="Complete task 9"><input data-task="t9" type="text" aria-label="Task 9 description" value="Change bed linen; check under beds and inside drawers."></li>
+        <li><input id="t10" type="checkbox" aria-label="Complete task 10"><input data-task="t10" type="text" aria-label="Task 10 description" value="Dust surfaces and check floors, mirrors, and high-touch points."></li>
+    </ul></section>
+    <section class="section"><h2>Living areas and final walk-through</h2><ul>
+        <li><input id="t11" type="checkbox" aria-label="Complete task 11"><input data-task="t11" type="text" aria-label="Task 11 description" value="Reset furniture and check the living area for left items."></li>
+        <li><input id="t12" type="checkbox" aria-label="Complete task 12"><input data-task="t12" type="text" aria-label="Task 12 description" value="Vacuum or sweep floors; spot-clean visible marks."></li>
+        <li><input id="t13" type="checkbox" aria-label="Complete task 13"><input data-task="t13" type="text" aria-label="Task 13 description" value="Set temperature and lighting to the host's arrival preference."></li>
+        <li><input id="t14" type="checkbox" aria-label="Complete task 14"><input data-task="t14" type="text" aria-label="Task 14 description" value="Secure windows and doors; return keys or access items as agreed."></li>
+        <li><input id="t15" type="checkbox" aria-label="Complete task 15"><input data-task="t15" type="text" aria-label="Task 15 description" value="Send the host a completion note and flag any issues below."></li>
+    </ul></section>
+    <section class="notes"><h2>Handoff notes / items to follow up</h2><label class="field" for="handoff-notes">Notes<textarea id="handoff-notes" placeholder="Record low supplies, maintenance observations, or items needing host attention."></textarea></label></section>
+    <p>This is a starting template, not a safety or regulatory inspection. Adapt the checklist to your property, local requirements, and the responsibilities agreed with your cleaner.</p>
+</main>
+<script>
+    "use strict";
+    const storageKey = "turnover-handoff-kit-v1";
+    const controls = [...document.querySelectorAll("input[type=text], input[type=date], input[type=checkbox], textarea")];
+    const status = document.getElementById("save-status");
+    const keyFor = control => control.dataset.task ? `task:${control.dataset.task}` : control.id;
+    function persist() {
+        const state = Object.fromEntries(controls.map(control => [keyFor(control), control.type === "checkbox" ? control.checked : control.value]));
+        try {
+            localStorage.setItem(storageKey, JSON.stringify(state));
+            status.textContent = "Changes saved locally in this browser.";
+        } catch (error) {
+            status.textContent = `Could not save checklist locally: ${error.message}`;
+        }
+    }
+    try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        controls.forEach(control => {
+            const key = keyFor(control);
+            if (Object.prototype.hasOwnProperty.call(saved, key)) {
+                if (control.type === "checkbox") control.checked = saved[key] === true;
+                else if (typeof saved[key] === "string") control.value = saved[key];
+            }
+        });
+    } catch (error) {
+        status.textContent = `Could not restore checklist: ${error.message}`;
+    }
+    controls.forEach(control => control.addEventListener("input", persist));
+    controls.filter(control => control.type === "checkbox").forEach(control => control.addEventListener("change", persist));
+    document.getElementById("print-button").addEventListener("click", () => window.print());
+    document.getElementById("reset-button").addEventListener("click", () => {
+        controls.forEach(control => {
+            if (control.type === "checkbox") control.checked = false;
+            else if (control.dataset.task) control.value = control.defaultValue;
+            else control.value = "";
+        });
+        persist();
+    });
+</script>
+</body>
+</html>

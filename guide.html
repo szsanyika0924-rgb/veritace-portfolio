@@ -3,1192 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f5f2ec">
-    <meta name="description" content="A practical, beautifully simple guide to making room for focused work and a calmer week.">
+    <meta name="theme-color" content="#101918">
+    <meta name="description" content="A simple monthly profit check for independent short-term-rental hosts, with practical turnover and guest-message add-ons.">
     <link rel="manifest" href="./manifest.json">
-    <link rel="icon" href="./nexus-icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" sizes="192x192" href="./nexus-icon-192.png">
-    <title>The Focus Field Guide — Brightline Press</title>
+    <title>Rental Profit Snapshot — Early access</title>
     <style>
         :root {
-            color-scheme: light;
-            --paper: #f5f2ec;
-            --paper-deep: #ebe5da;
-            --ink: #192742;
-            --muted: #657083;
-            --accent: #b86f69;
-            --accent-dark: #92564f;
-            --line: rgba(25, 39, 66, 0.14);
-            --white: #fffefa;
-            --shadow: 0 24px 70px rgba(45, 48, 57, 0.12);
-            --content: 1120px;
+            color-scheme: dark;
+            --bg: #101918;
+            --surface: #192522;
+            --surface-raised: #202f2b;
+            --ink: #f5f4ec;
+            --muted: #b0bcb5;
+            --line: rgba(237, 248, 239, .15);
+            --mint: #9be7d4;
+            --gold: #f0c48e;
+            --content: 1080px;
         }
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 90px;
-        }
-
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             min-width: 320px;
             margin: 0;
-            background: var(--paper);
+            background: radial-gradient(ellipse at 80% 0, rgba(77, 142, 123, .2), transparent 34rem), var(--bg);
             color: var(--ink);
-            font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
-            line-height: 1.65;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        button,
-        input {
-            font: inherit;
-        }
-
-        button,
-        a {
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .wrap {
-            width: min(var(--content), calc(100% - 48px));
-            margin-inline: auto;
-        }
-
-        .site-header {
-            position: sticky;
-            z-index: 5;
-            top: 0;
-            border-bottom: 1px solid rgba(25, 39, 66, 0.09);
-            background: rgba(245, 242, 236, 0.93);
-            backdrop-filter: blur(16px);
-        }
-
-        .nav {
-            display: flex;
-            min-height: 76px;
-            align-items: center;
-            justify-content: space-between;
-            gap: 28px;
-        }
-
-        .brand {
-            display: inline-flex;
-            flex-direction: column;
-            color: var(--ink);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            line-height: 1.05;
-            text-decoration: none;
-        }
-
-        .brand span {
-            margin-top: 6px;
-            color: var(--muted);
-            font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
-            font-size: 0.58rem;
-            font-weight: 700;
-            letter-spacing: 0.17em;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: clamp(18px, 3vw, 36px);
-            color: #3e4a60;
-            font-size: 0.88rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            transition: color 150ms ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-dark);
-        }
-
-        .button {
-            display: inline-flex;
-            min-height: 48px;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px 22px;
-            border: 1px solid transparent;
-            border-radius: 999px;
-            font-size: 0.9rem;
-            font-weight: 750;
-            text-align: center;
-            text-decoration: none;
-            transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
-            cursor: pointer;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-        }
-
-        .button:focus-visible,
-        a:focus-visible,
-        summary:focus-visible,
-        input:focus-visible {
-            outline: 3px solid rgba(184, 111, 105, 0.55);
-            outline-offset: 3px;
-        }
-
-        .button-dark {
-            background: var(--ink);
-            color: white;
-            box-shadow: 0 9px 24px rgba(25, 39, 66, 0.17);
-        }
-
-        .button-dark:hover {
-            background: #263958;
-        }
-
-        .button-rose {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 9px 24px rgba(184, 111, 105, 0.24);
-        }
-
-        .button-rose:hover {
-            background: var(--accent-dark);
-        }
-
-        .button-outline {
-            border-color: var(--line);
-            background: transparent;
-            color: var(--ink);
-        }
-
-        .button-wide {
-            width: 100%;
-        }
-
-        .eyebrow,
-        .section-label {
-            margin: 0 0 14px;
-            color: var(--accent-dark);
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-        }
-
-        .hero {
-            display: grid;
-            min-height: 640px;
-            grid-template-columns: minmax(0, 1.08fr) minmax(330px, 0.92fr);
-            align-items: center;
-            gap: clamp(38px, 7vw, 92px);
-            padding-block: 78px 92px;
-        }
-
-        .hero-copy {
-            max-width: 580px;
-        }
-
-        h1,
-        h2,
-        h3,
-        p {
-            margin-top: 0;
-        }
-
-        h1,
-        h2 {
-            font-family: Georgia, "Times New Roman", serif;
-            font-weight: 500;
-            letter-spacing: -0.055em;
-        }
-
-        h1 {
-            max-width: 640px;
-            margin-bottom: 20px;
-            font-size: clamp(3.2rem, 7.2vw, 6.4rem);
-            line-height: 0.99;
-        }
-
-        h1 em {
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .hero-lede {
-            max-width: 540px;
-            margin-bottom: 28px;
-            color: #505c70;
-            font-size: clamp(1.05rem, 1.7vw, 1.22rem);
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .microcopy {
-            margin: 16px 0 0;
-            color: var(--muted);
-            font-size: 0.78rem;
-        }
-
-        .book-scene {
-            position: relative;
-            display: grid;
-            min-height: 410px;
-            place-items: center;
-            isolation: isolate;
-        }
-
-        .book-scene::before {
-            position: absolute;
-            z-index: -1;
-            width: min(420px, 90%);
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(201, 166, 151, 0.36), rgba(201, 166, 151, 0) 68%);
-            content: "";
-        }
-
-        .book-cover {
-            position: relative;
-            display: flex;
-            width: min(280px, 72%);
-            aspect-ratio: 0.72;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 28px;
-            overflow: hidden;
-            transform: rotate(5deg);
-            border: 1px solid rgba(255, 255, 255, 0.62);
-            background:
-                linear-gradient(145deg, rgba(255,255,255,.13), transparent 42%),
-                #263955;
-            box-shadow: 20px 26px 55px rgba(25, 39, 66, 0.27), inset 8px 0 rgba(255,255,255,.07);
-            color: #f7f3eb;
-        }
-
-        .book-cover::before {
-            position: absolute;
-            inset: 15px;
-            border: 1px solid rgba(232, 214, 187, 0.35);
-            content: "";
-        }
-
-        .book-cover::after {
-            position: absolute;
-            right: -24%;
-            bottom: -5%;
-            width: 95%;
-            aspect-ratio: 1;
-            border: 1px solid rgba(226, 190, 157, 0.45);
-            border-radius: 50%;
-            box-shadow: 0 0 0 18px rgba(226, 190, 157, 0.07), 0 0 0 38px rgba(226, 190, 157, 0.05);
-            content: "";
-        }
-
-        .cover-kicker,
-        .cover-title,
-        .cover-author,
-        .cover-orbit {
-            position: relative;
-            z-index: 1;
-        }
-
-        .cover-kicker {
-            font-size: 0.58rem;
-            font-weight: 800;
-            letter-spacing: 0.18em;
-        }
-
-        .cover-title {
-            max-width: 210px;
-            margin: auto 0;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(2rem, 4vw, 2.7rem);
-            line-height: 0.98;
-        }
-
-        .cover-title span {
-            display: block;
-            color: #e5b99e;
-            font-style: italic;
-        }
-
-        .cover-author {
-            font-size: 0.62rem;
-            font-weight: 750;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-        }
-
-        .cover-orbit {
-            position: absolute;
-            top: 31%;
-            right: 19%;
-            width: 56px;
-            height: 56px;
-            border: 1px solid rgba(232, 214, 187, 0.64);
-            border-radius: 50%;
-        }
-
-        .cover-orbit::after {
-            position: absolute;
-            inset: 10px;
-            border: 1px solid rgba(232, 214, 187, 0.6);
-            border-radius: 50%;
-            content: "";
-        }
-
-        .floating-note {
-            position: absolute;
-            right: 1%;
-            bottom: 16%;
-            max-width: 190px;
-            padding: 14px 18px;
-            transform: rotate(-4deg);
-            border: 1px solid rgba(25, 39, 66, 0.08);
-            border-radius: 13px;
-            background: var(--white);
-            box-shadow: var(--shadow);
-            color: #536078;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 0.94rem;
-            font-style: italic;
-        }
-
-        .proof-strip {
-            border-block: 1px solid var(--line);
-            background: rgba(255, 254, 250, 0.48);
-        }
-
-        .proof-items {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            padding-block: 19px;
-            color: #4d596d;
-            font-size: 0.86rem;
-            text-align: center;
-        }
-
-        .proof-items span + span {
-            border-left: 1px solid var(--line);
-        }
-
-        .section {
-            padding-block: 104px;
-        }
-
-        .section-heading {
-            max-width: 720px;
-            margin: 0 auto 42px;
-            text-align: center;
-        }
-
-        .section-heading h2,
-        .split-copy h2 {
-            margin-bottom: 16px;
-            font-size: clamp(2.4rem, 5vw, 4.2rem);
-            line-height: 1.04;
-        }
-
-        .section-heading > p:last-child {
-            max-width: 620px;
-            margin: 0 auto;
-            color: var(--muted);
-        }
-
-        .split-section {
-            display: grid;
-            grid-template-columns: 0.9fr 1.1fr;
-            align-items: center;
-            gap: clamp(40px, 8vw, 110px);
-        }
-
-        .quote-card {
-            position: relative;
-            padding: clamp(30px, 5vw, 56px);
-            border-radius: 24px;
-            background: var(--ink);
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        .quote-card::before {
-            position: absolute;
-            top: 12px;
-            right: 28px;
-            color: rgba(229, 185, 158, 0.62);
-            content: "“";
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 8rem;
-            line-height: 1;
-        }
-
-        .quote-card p {
-            position: relative;
-            margin-bottom: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(1.45rem, 3vw, 2.1rem);
-            line-height: 1.35;
-        }
-
-        .split-copy > p:not(.section-label) {
-            color: var(--muted);
-        }
-
-        .benefit-list {
-            display: grid;
-            gap: 17px;
-            margin: 28px 0 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .benefit-list li {
-            display: grid;
-            grid-template-columns: 27px 1fr;
-            align-items: start;
-            gap: 12px;
-        }
-
-        .check {
-            display: grid;
-            width: 25px;
-            height: 25px;
-            place-items: center;
-            border-radius: 50%;
-            background: #e9d9d3;
-            color: var(--accent-dark);
-            font-size: 0.8rem;
-            font-weight: 900;
-        }
-
-        .guide-section {
-            background: #eee9e0;
-        }
-
-        .chapter-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        .chapter {
-            min-height: 210px;
-            padding: 26px;
-            border: 1px solid rgba(25, 39, 66, 0.1);
-            border-radius: 18px;
-            background: rgba(255, 254, 250, 0.72);
-        }
-
-        .chapter-number {
-            display: inline-block;
-            margin-bottom: 26px;
-            color: var(--accent-dark);
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-        }
-
-        .chapter h3 {
-            margin-bottom: 9px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.35rem;
-            font-weight: 500;
-        }
-
-        .chapter p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 0.92rem;
-        }
-
-        .price-section {
-            padding-bottom: 112px;
-        }
-
-        .price-card {
-            display: grid;
-            max-width: 900px;
-            grid-template-columns: 1fr 0.78fr;
-            gap: 40px;
-            align-items: center;
-            margin: 0 auto;
-            padding: clamp(26px, 5vw, 54px);
-            border: 1px solid rgba(25, 39, 66, 0.12);
-            border-radius: 26px;
-            background: var(--white);
-            box-shadow: var(--shadow);
-        }
-
-        .price-card h3 {
-            margin-bottom: 8px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 2rem;
-            font-weight: 500;
-            letter-spacing: -0.035em;
-        }
-
-        .price-card p {
-            color: var(--muted);
-        }
-
-        .price-features {
-            display: grid;
-            gap: 10px;
-            margin: 24px 0 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .price-features li {
-            color: #455167;
-            font-size: 0.92rem;
-        }
-
-        .price-features li::before {
-            margin-right: 10px;
-            color: var(--accent-dark);
-            content: "✓";
-            font-weight: 900;
-        }
-
-        .price-box {
-            padding: 26px;
-            border-radius: 20px;
-            background: #f1eee8;
-            text-align: center;
-        }
-
-        .price-label {
-            display: inline-block;
-            margin-bottom: 6px;
-            padding: 3px 9px;
-            border-radius: 999px;
-            background: #e8d6cf;
-            color: #794c46;
-            font-size: 0.68rem;
-            font-weight: 850;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .price {
-            display: block;
-            margin-bottom: 5px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 3rem;
-            letter-spacing: -0.06em;
-            line-height: 1.2;
-        }
-
-        .price-caption {
-            display: block;
-            margin-bottom: 19px;
-            color: var(--muted);
-            font-size: 0.8rem;
-        }
-
-        .faq-section {
-            padding-top: 0;
-        }
-
-        .faq-list {
-            max-width: 760px;
-            margin: 0 auto;
-            border-top: 1px solid var(--line);
-        }
-
-        .faq-list details {
-            border-bottom: 1px solid var(--line);
-        }
-
-        .faq-list summary {
-            display: flex;
-            min-height: 68px;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            font-weight: 700;
-            list-style: none;
-            cursor: pointer;
-        }
-
-        .faq-list summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .faq-list summary::after {
-            color: var(--accent-dark);
-            content: "+";
-            font-size: 1.4rem;
-        }
-
-        .faq-list details[open] summary::after {
-            content: "−";
-        }
-
-        .faq-list details p {
-            max-width: 660px;
-            padding: 0 36px 18px 0;
-            margin: -3px 0 0;
-            color: var(--muted);
-        }
-
-        .closing {
-            padding-block: 72px;
-            background: #eae3d9;
-            text-align: center;
-        }
-
-        .closing h2 {
-            max-width: 670px;
-            margin: 0 auto 23px;
-            font-size: clamp(2.5rem, 6vw, 4.6rem);
-            line-height: 1.03;
-        }
-
-        .closing p {
-            margin-bottom: 24px;
-            color: var(--muted);
-        }
-
-        .site-footer {
-            padding-block: 28px;
-            color: var(--muted);
-            font-size: 0.8rem;
-        }
-
-        .footer-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 14px;
-        }
-
-        .footer-row p {
-            margin: 0;
-        }
-
-        .demo-note {
-            color: #80524c;
-            font-weight: 650;
-        }
-
-        dialog {
-            width: min(500px, calc(100% - 28px));
-            max-height: min(90vh, 740px);
-            padding: 0;
-            overflow: auto;
-            border: 1px solid rgba(25, 39, 66, 0.14);
-            border-radius: 24px;
-            background: var(--white);
-            color: var(--ink);
-            box-shadow: 0 28px 100px rgba(12, 18, 29, 0.28);
-        }
-
-        dialog::backdrop {
-            background: rgba(15, 25, 42, 0.56);
-            backdrop-filter: blur(5px);
-        }
-
-        .dialog-inner {
-            padding: clamp(24px, 6vw, 38px);
-        }
-
-        .dialog-top {
-            display: flex;
-            align-items: start;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .dialog-top h2 {
-            margin: 0 0 8px;
-            font-size: 2.1rem;
-            line-height: 1.08;
-        }
-
-        .dialog-close {
-            display: grid;
-            width: 40px;
-            height: 40px;
-            flex: 0 0 auto;
-            place-items: center;
-            border: 1px solid var(--line);
-            border-radius: 50%;
-            background: transparent;
-            color: var(--ink);
-            font-size: 1.4rem;
-            cursor: pointer;
-        }
-
-        .dialog-copy {
-            margin-bottom: 22px;
-            color: var(--muted);
-        }
-
-        .order-summary {
-            display: flex;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 16px 0;
-            margin-bottom: 20px;
-            border-block: 1px solid var(--line);
-            font-weight: 750;
-        }
-
-        .checkout-form {
-            display: grid;
-            gap: 14px;
-        }
-
-        .checkout-form label {
-            display: grid;
-            gap: 6px;
-            font-size: 0.84rem;
-            font-weight: 750;
-        }
-
-        .checkout-form input {
-            width: 100%;
-            min-height: 48px;
-            padding: 10px 12px;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            background: white;
-            color: var(--ink);
-        }
-
-        .checkout-form .demo-note {
-            margin: 0;
-            font-size: 0.78rem;
-        }
-
-        .checkout-success {
-            padding-top: 10px;
-            text-align: center;
-        }
-
-        .success-mark {
-            display: grid;
-            width: 58px;
-            height: 58px;
-            place-items: center;
-            margin: 0 auto 16px;
-            border-radius: 50%;
-            background: #e4eee6;
-            color: #3c7553;
-            font-size: 1.6rem;
-            font-weight: 800;
-        }
-
-        .checkout-success h3 {
-            margin-bottom: 8px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.65rem;
-        }
-
-        .checkout-success p {
-            color: var(--muted);
-        }
-
-        .checkout-success[hidden] {
-            display: none;
-        }
-
+            font: 16px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
+        a { color: inherit; }
+        button, input { font: inherit; }
+        :focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+        .wrap { width: min(var(--content), calc(100% - 40px)); margin-inline: auto; }
+        .topbar { border-bottom: 1px solid var(--line); }
+        .nav { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .brand { font-weight: 800; letter-spacing: .04em; text-decoration: none; }
+        .nav a:last-child { color: var(--mint); text-decoration: none; }
+        .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 54px; align-items: center; padding-block: clamp(56px, 9vw, 112px); }
+        .eyebrow, .label { color: var(--mint); font-size: .76rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+        h1, h2, h3, p { margin-top: 0; }
+        h1 { max-width: 700px; margin-bottom: 20px; font-size: clamp(2.7rem, 7vw, 5.2rem); letter-spacing: -.065em; line-height: 1.02; }
+        h1 span { color: var(--mint); }
+        .lede { max-width: 610px; color: var(--muted); font-size: 1.1rem; }
+        .button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px; padding: 0 19px; border: 1px solid transparent; border-radius: 99px; font-weight: 800; text-decoration: none; cursor: pointer; }
+        .button-primary { background: var(--mint); color: #13211e; }
+        .button-secondary { border-color: var(--line); background: transparent; color: var(--ink); }
+        .hero .button { margin: 8px 8px 0 0; }
+        .notice { margin-top: 16px; color: var(--muted); font-size: .86rem; }
+        .snapshot { padding: 26px; border: 1px solid rgba(155, 231, 212, .26); border-radius: 22px; background: linear-gradient(145deg, var(--surface-raised), var(--surface)); box-shadow: 0 25px 80px rgba(0,0,0,.22); }
+        .snapshot h2 { margin-bottom: 6px; font-size: 1rem; }
+        .snapshot > p { color: var(--muted); font-size: .86rem; }
+        .mock-row { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+        .mock-row strong { color: var(--ink); }
+        .mock-row.total { border: 0; color: var(--ink); font-weight: 800; }
+        section { padding-block: 60px; border-top: 1px solid var(--line); }
+        .section-head { max-width: 660px; margin-bottom: 28px; }
+        h2 { font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -.045em; line-height: 1.1; }
+        .section-head p:last-child, .product p, .fine { color: var(--muted); }
+        .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+        .product { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: rgba(25,37,34,.85); }
+        .product h3 { margin: 7px 0 10px; font-size: 1.2rem; }
+        .price { color: var(--gold); font-size: 1.35rem; font-weight: 850; white-space: nowrap; }
+        .product ul { padding-left: 19px; color: var(--muted); }
+        .cart { display: grid; grid-template-columns: 1.05fr .95fr; gap: 28px; align-items: start; padding: 28px; border: 1px solid rgba(155,231,212,.28); border-radius: 22px; background: var(--surface); }
+        .cart h3 { margin-bottom: 5px; }
+        .choice { display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+        .choice input { width: 19px; height: 19px; flex: 0 0 auto; margin-top: 4px; accent-color: var(--mint); }
+        .choice span { display: block; }
+        .choice small { color: var(--muted); }
+        .total-box { padding: 20px; border-radius: 16px; background: var(--surface-raised); }
+        .total-line { display: flex; justify-content: space-between; gap: 16px; }
+        .total-line strong { font-size: 1.6rem; }
+        .bundle { margin: 12px 0; padding: 12px; border: 1px solid rgba(240,196,142,.4); border-radius: 12px; color: var(--gold); }
+        .total-box .button { width: 100%; margin-top: 12px; }
+        .status { min-height: 1.5em; margin: 10px 0 0; color: var(--muted); font-size: .82rem; }
+        .faq { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+        details { padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+        summary { font-weight: 750; cursor: pointer; }
+        details p { margin: 10px 0 0; color: var(--muted); }
+        footer { padding: 28px 0 42px; border-top: 1px solid var(--line); color: var(--muted); font-size: .83rem; }
         @media (max-width: 760px) {
-            .wrap {
-                width: min(var(--content), calc(100% - 36px));
-            }
-
-            .nav {
-                min-height: 68px;
-            }
-
-            .nav-links {
-                gap: 15px;
-                font-size: 0.78rem;
-            }
-
-            .nav-links .button {
-                display: none;
-            }
-
-            .hero {
-                min-height: 0;
-                grid-template-columns: 1fr;
-                gap: 12px;
-                padding-block: 64px 48px;
-            }
-
-            h1 {
-                max-width: 600px;
-                font-size: clamp(3.2rem, 12vw, 5.2rem);
-            }
-
-            .book-scene {
-                min-height: 350px;
-            }
-
-            .book-cover {
-                width: min(235px, 65%);
-            }
-
-            .floating-note {
-                right: 0;
-                bottom: 12%;
-            }
-
-            .section {
-                padding-block: 74px;
-            }
-
-            .split-section,
-            .price-card {
-                grid-template-columns: 1fr;
-            }
-
-            .chapter-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .quote-card {
-                order: 2;
-            }
-
-            .price-box {
-                max-width: 400px;
-                margin-inline: auto;
-            }
-        }
-
-        @media (max-width: 520px) {
-            .wrap {
-                width: calc(100% - 32px);
-            }
-
-            .brand {
-                font-size: 1.05rem;
-            }
-
-            .nav-links {
-                gap: 12px;
-                font-size: 0.74rem;
-            }
-
-            .nav-links a:first-child {
-                display: none;
-            }
-
-            .hero {
-                padding-top: 52px;
-            }
-
-            .hero-actions .button {
-                width: 100%;
-            }
-
-            .proof-items {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                padding-block: 16px;
-                font-size: 0.8rem;
-            }
-
-            .proof-items span + span {
-                border: 0;
-            }
-
-            .chapter-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .chapter {
-                min-height: 0;
-            }
-
-            .chapter-number {
-                margin-bottom: 12px;
-            }
-
-            .price-card {
-                gap: 25px;
-            }
-
-            .footer-row {
-                flex-direction: column;
-                align-items: start;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                transition-duration: 0.01ms !important;
-            }
+            .hero, .cart { grid-template-columns: 1fr; }
+            .hero { gap: 32px; }
+            .product-grid { grid-template-columns: 1fr; }
+            .faq { grid-template-columns: 1fr; }
+            .cart { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <header class="site-header">
+    <header class="topbar">
         <nav class="nav wrap" aria-label="Main navigation">
-            <a class="brand" href="#top">Brightline Press<span>Small guides for better days</span></a>
-            <div class="nav-links">
-                <a href="#inside">Inside the guide</a>
-                <a href="#price">Pricing</a>
-                <a href="#faq">FAQs</a>
-                <a class="button button-dark" href="#price">Get the guide <span aria-hidden="true">↗</span></a>
-            </div>
+            <a class="brand" href="./guide.html">Rental Profit Snapshot</a>
+            <a href="#products">What's included</a>
         </nav>
     </header>
-
-    <main id="top">
+    <main>
         <section class="hero wrap" aria-labelledby="hero-title">
-            <div class="hero-copy">
-                <p class="eyebrow">A practical field guide · 7 short chapters</p>
-                <h1 id="hero-title">Make room for your <em>best work.</em></h1>
-                <p class="hero-lede">A thoughtful, easy-to-use guide to finding your focus, protecting your time, and finishing the work that matters — one small shift at a time.</p>
-                <div class="hero-actions">
-                    <a class="button button-rose" href="#price">Get the guide <span aria-hidden="true">→</span></a>
-                    <a class="button button-outline" href="#inside">Take a look inside</a>
-                </div>
-                <p class="microcopy">One-time purchase · Digital guide · Read on any device</p>
+            <div>
+                <p class="eyebrow">A simpler monthly check for short-term-rental hosts</p>
+                <h1 id="hero-title">Know what your rental <span>actually kept.</span></h1>
+                <p class="lede">A practical snapshot of monthly rental income and costs, plus two optional handoff tools for the repeat work that comes with hosting.</p>
+                <a class="button button-primary" href="#early-access">Get early-access updates <span aria-hidden="true">→</span></a>
+                <a class="button button-secondary" href="#products">See the proposed toolkit</a>
+                <p class="notice">Pre-launch preview. The proposed $19 tool and $9 add-ons are not available to purchase yet. No payment is collected on this page.</p>
             </div>
-            <div class="book-scene" role="img" aria-label="Illustrated cover of The Focus Field Guide">
-                <div class="book-cover" aria-hidden="true">
-                    <span class="cover-kicker">BRIGHTLINE PRESS · FIELD GUIDE 01</span>
-                    <span class="cover-orbit"></span>
-                    <span class="cover-title">The Focus <span>Field Guide</span></span>
-                    <span class="cover-author">A clearer way to work</span>
-                </div>
-                <div class="floating-note" aria-hidden="true">Less noise.<br>More meaningful work.</div>
-            </div>
+            <aside class="snapshot" aria-label="Example monthly rental snapshot">
+                <p class="label">One calm monthly check</p>
+                <h2>Example snapshot</h2>
+                <p>Replace rough estimates with your own figures.</p>
+                <div class="mock-row"><span>Booking income</span><strong>$2,400</strong></div>
+                <div class="mock-row"><span>Platform fees</span><strong>−$84</strong></div>
+                <div class="mock-row"><span>Cleaning &amp; supplies</span><strong>−$410</strong></div>
+                <div class="mock-row total"><span>Estimated amount kept</span><strong>$1,906</strong></div>
+                <p class="fine">Illustrative numbers only. Not accounting, tax, or investment advice.</p>
+            </aside>
         </section>
 
-        <div class="proof-strip" aria-label="Guide details">
-            <div class="proof-items wrap">
-                <span>Short, practical lessons</span>
-                <span>No special tools required</span>
-                <span>Keep it and revisit anytime</span>
-            </div>
-        </div>
-
-        <section class="section wrap split-section" aria-labelledby="promise-title">
-            <div class="quote-card">
-                <p>You don't need a perfect routine. You need a few good ways to begin again.</p>
-            </div>
-            <div class="split-copy">
-                <p class="section-label">For thoughtful people with full calendars</p>
-                <h2 id="promise-title">Your attention is worth protecting.</h2>
-                <p>Some days get swallowed by pings, open tabs, and other people's priorities. This guide helps you reset without adding another complicated system to your life.</p>
-                <ul class="benefit-list">
-                    <li><span class="check" aria-hidden="true">✓</span><span>Choose one meaningful priority instead of carrying ten.</span></li>
-                    <li><span class="check" aria-hidden="true">✓</span><span>Create a calmer start that makes it easier to begin.</span></li>
-                    <li><span class="check" aria-hidden="true">✓</span><span>Build a simple reset for the days that don't go to plan.</span></li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="section guide-section" id="inside" aria-labelledby="inside-title">
+        <section id="products">
             <div class="wrap">
-                <div class="section-heading">
-                    <p class="section-label">A little structure, a lot more breathing room</p>
-                    <h2 id="inside-title">A clearer week, page by page.</h2>
-                    <p>Seven compact lessons turn good intentions into small, repeatable actions. Start anywhere, take what helps, and make it your own.</p>
+                <div class="section-head">
+                    <p class="label">The proposed toolkit</p>
+                    <h2>One quick snapshot. Two less-chaotic handoffs.</h2>
+                    <p>Designed to be editable and practical rather than another system to maintain. The products are being prepared; none is currently for sale.</p>
                 </div>
-                <div class="chapter-grid">
-                    <article class="chapter">
-                        <span class="chapter-number">01 / RESET</span>
-                        <h3>Find your real priority</h3>
-                        <p>Separate the work that matters from the noise around it.</p>
+                <div class="product-grid">
+                    <article class="product">
+                        <p class="label">Core tool</p>
+                        <h3>Rental Profit Snapshot</h3>
+                        <p>A lightweight monthly calculator to estimate income, costs, and the amount left after the expenses you enter.</p>
+                        <ul><li>One-time proposed price: $19</li><li>Use it when you want a quick monthly check</li><li>Your figures stay in your browser in the planned offline version</li></ul>
                     </article>
-                    <article class="chapter">
-                        <span class="chapter-number">02 / FOCUS</span>
-                        <h3>Make starting easier</h3>
-                        <p>Set up a gentler first step and a workspace that supports it.</p>
+                    <article class="product">
+                        <p class="label">Optional add-on</p>
+                        <h3>Turnover Handoff Kit</h3>
+                        <p>An editable room-by-room turnover checklist and handoff notes to make the next reset easier to verify.</p>
+                        <ul><li>One-time proposed price: $9</li><li>Editable checklist and print-friendly layout</li><li>Adapt tasks to your property and cleaner</li></ul>
                     </article>
-                    <article class="chapter">
-                        <span class="chapter-number">03 / KEEP GOING</span>
-                        <h3>Protect your attention</h3>
-                        <p>Use simple boundaries to stay with one thing at a time.</p>
-                    </article>
-                    <article class="chapter">
-                        <span class="chapter-number">04 / ENERGY</span>
-                        <h3>Work with your day</h3>
-                        <p>Match the right kind of work to the energy you have.</p>
-                    </article>
-                    <article class="chapter">
-                        <span class="chapter-number">05 / DISTRACTIONS</span>
-                        <h3>Make space for deep work</h3>
-                        <p>Quiet the usual interruptions without disappearing.</p>
-                    </article>
-                    <article class="chapter">
-                        <span class="chapter-number">06 / FOLLOW THROUGH</span>
-                        <h3>Finish with less friction</h3>
-                        <p>Turn a daunting task into a sequence of clear next steps.</p>
-                    </article>
-                    <article class="chapter">
-                        <span class="chapter-number">07 / REFLECT</span>
-                        <h3>Reset and begin again</h3>
-                        <p>Keep what worked and make a fresh plan for tomorrow.</p>
+                    <article class="product">
+                        <p class="label">Optional add-on</p>
+                        <h3>Guest-Arrival Message Pack</h3>
+                        <p>Editable arrival and stay-message starting points, with clear placeholders for the details guests actually need.</p>
+                        <ul><li>One-time proposed price: $9</li><li>Copy-ready messages you can personalize</li><li>No promise or guarantee of guest ratings</li></ul>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section class="section price-section wrap" id="price" aria-labelledby="price-title">
-            <div class="section-heading">
-                <p class="section-label">Your next good read starts here</p>
-                <h2 id="price-title">One guide. A more intentional week.</h2>
-                <p>Keep the ideas that work for you and return to them whenever you need a reset.</p>
-            </div>
-            <article class="price-card">
-                <div>
-                    <p class="section-label">The Focus Field Guide</p>
-                    <h3>A practical guide to focused work</h3>
-                    <p>Seven short chapters with reflection prompts and small exercises you can try right away.</p>
-                    <ul class="price-features">
-                        <li>PDF guide designed for phone, tablet, and desktop</li>
-                        <li>One-time purchase, yours to keep</li>
-                        <li>Concise lessons and practical prompts</li>
-                    </ul>
-                </div>
-                <div class="price-box">
-                    <span class="price-label">Sample price</span>
-                    <span class="price">4 900 Ft</span>
-                    <span class="price-caption">One-time · No subscription</span>
-                    <button class="button button-rose button-wide" type="button" data-open-checkout>Continue to demo checkout <span aria-hidden="true">→</span></button>
-                    <p class="microcopy">Digital product · No shipping</p>
-                </div>
-            </article>
-        </section>
-
-        <section class="section faq-section wrap" id="faq" aria-labelledby="faq-title">
-            <div class="section-heading">
-                <p class="section-label">A few good questions</p>
-                <h2 id="faq-title">Before you turn the page.</h2>
-            </div>
-            <div class="faq-list">
-                <details>
-                    <summary>What format is the guide?</summary>
-                    <p>This sample store is set up for a downloadable PDF. Add the final file format and delivery details before launch.</p>
-                </details>
-                <details>
-                    <summary>How will I receive my purchase?</summary>
-                    <p>Instant delivery is not connected in this demo. Connect a payment and file-delivery provider before accepting real orders.</p>
-                </details>
-                <details>
-                    <summary>Can I read it on my phone?</summary>
-                    <p>Yes. The sample product is described as a responsive PDF guide, so it can be read on a phone, tablet, or computer.</p>
-                </details>
-                <details>
-                    <summary>Is the checkout live?</summary>
-                    <p>No. Checkout is a front-end demonstration only. It does not process payments, store details, or deliver a file.</p>
-                </details>
-            </div>
-        </section>
-
-        <section class="closing">
+        <section id="early-access">
             <div class="wrap">
-                <p class="section-label">A small step toward a calmer week</p>
-                <h2>Make space for the work you want to remember.</h2>
-                <p>Start with one page. Take it at your own pace.</p>
-                <a class="button button-dark" href="#price">See the guide <span aria-hidden="true">↑</span></a>
+                <div class="section-head">
+                    <p class="label">Choose what you would want</p>
+                    <h2>Build your proposed kit.</h2>
+                    <p>The total below is a price preview, not an order. Selecting both add-ons shows the proposed $29 bundle instead of $37.</p>
+                </div>
+                <div class="cart">
+                    <div>
+                        <h3>Included in every option</h3>
+                        <div class="choice">
+                            <input type="checkbox" checked disabled aria-label="Rental Profit Snapshot is included">
+                            <span><strong>Rental Profit Snapshot</strong><small>$19 · Core tool</small></span>
+                        </div>
+                        <label class="choice">
+                            <input id="turnover-choice" type="checkbox">
+                            <span><strong>Turnover Handoff Kit</strong><small>$9 · Optional checklist</small></span>
+                        </label>
+                        <label class="choice">
+                            <input id="messages-choice" type="checkbox">
+                            <span><strong>Guest-Arrival Message Pack</strong><small>$9 · Optional message templates</small></span>
+                        </label>
+                    </div>
+                    <div class="total-box">
+                        <p class="label">Proposed one-time total</p>
+                        <div class="total-line"><span id="total-label">Core tool</span><strong id="cart-total" aria-live="polite">$19</strong></div>
+                        <p class="bundle" id="bundle-note" hidden>Bundle preview: $29 for all three (save $8 vs. separate $9 add-ons).</p>
+                        <a class="button button-primary" id="interest-link" href="mailto:alexander.sabo.business@gmail.com?subject=Rental%20Profit%20Snapshot%20early%20access&body=Hi%2C%20I%27m%20interested%20in%20the%20proposed%20%2419%20Rental%20Profit%20Snapshot.">Email my interest <span aria-hidden="true">→</span></a>
+                        <p class="status" id="cart-status" role="status">Pre-launch only: this link opens an email draft; it does not place an order or process a payment.</p>
+                    </div>
+                </div>
+                <p class="fine">Your email app opens with an English message addressed to the product owner. Nothing is sent until you review and send it. Your selections are included in the draft.</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+                <div class="section-head">
+                    <p class="label">A few honest answers</p>
+                    <h2>Before this becomes a store.</h2>
+                </div>
+                <div class="faq">
+                    <details><summary>Can I buy these products now?</summary><p>No. This is an early-access and product preview page. Checkout and digital delivery have not been connected.</p></details>
+                    <details><summary>How does the email button work?</summary><p>It opens a pre-filled email in your default email app. You can edit it, and it will not be sent automatically.</p></details>
+                    <details><summary>Will the bundle charge $29?</summary><p>No charge is possible here. The $29 bundle is a proposed price shown for feedback; Stripe links and delivery setup are still needed.</p></details>
+                    <details><summary>Will the message templates get me better reviews?</summary><p>No specific rating can be promised. Clear, accurate communication can help set expectations, but guest reviews are outside the host's control.</p></details>
+                </div>
             </div>
         </section>
     </main>
-
-    <footer class="site-footer">
-        <div class="footer-row wrap">
-            <p>© <span id="year"></span> Brightline Press. Small guides for better days.</p>
-            <p class="demo-note">Sample product and price · Demo checkout only</p>
-        </div>
-    </footer>
-
-    <dialog id="checkout-dialog" aria-labelledby="checkout-title">
-        <div class="dialog-inner">
-            <div class="dialog-top">
-                <div>
-                    <p class="section-label">Sample order</p>
-                    <h2 id="checkout-title">Demo checkout</h2>
-                </div>
-                <button class="dialog-close" type="button" aria-label="Close checkout" data-close-checkout>×</button>
-            </div>
-            <p class="dialog-copy">Try the sample purchase flow. Nothing will be charged or sent.</p>
-            <div class="order-summary">
-                <span>The Focus Field Guide</span>
-                <span>4 900 Ft</span>
-            </div>
-            <form class="checkout-form" id="checkout-form">
-                <label for="buyer-name">Name
-                    <input id="buyer-name" name="name" autocomplete="name" required>
-                </label>
-                <label for="buyer-email">Email
-                    <input id="buyer-email" name="email" type="email" autocomplete="email" required>
-                </label>
-                <p class="demo-note">Demo only. These details stay in this page and are not sent or saved.</p>
-                <button class="button button-rose button-wide" type="submit">Simulate demo purchase</button>
-            </form>
-            <div class="checkout-success" id="checkout-success" role="status" hidden>
-                <span class="success-mark" aria-hidden="true">✓</span>
-                <h3>Demo complete</h3>
-                <p>No payment was processed and no download was delivered. Connect a real checkout and delivery service before launch.</p>
-                <button class="button button-dark" type="button" data-close-checkout>Back to the guide</button>
-            </div>
-        </div>
-    </dialog>
-
+    <footer><div class="wrap">Rental Profit Snapshot · Early-access preview · Not financial, tax, or accounting advice.</div></footer>
     <script>
-        const checkoutDialog = document.getElementById("checkout-dialog");
-        const checkoutForm = document.getElementById("checkout-form");
-        const checkoutSuccess = document.getElementById("checkout-success");
+        "use strict";
+        const turnoverChoice = document.getElementById("turnover-choice");
+        const messagesChoice = document.getElementById("messages-choice");
+        const total = document.getElementById("cart-total");
+        const totalLabel = document.getElementById("total-label");
+        const bundleNote = document.getElementById("bundle-note");
+        const interestLink = document.getElementById("interest-link");
 
-        document.getElementById("year").textContent = new Date().getFullYear();
+        function updateCart() {
+            const includesTurnover = turnoverChoice.checked;
+            const includesMessages = messagesChoice.checked;
+            const subtotal = 19 + (includesTurnover ? 9 : 0) + (includesMessages ? 9 : 0);
+            const usesBundle = includesTurnover && includesMessages;
+            const amount = usesBundle ? 29 : subtotal;
+            const items = [
+                "Rental Profit Snapshot ($19)",
+                ...(includesTurnover ? ["Turnover Handoff Kit ($9)"] : []),
+                ...(includesMessages ? ["Guest-Arrival Message Pack ($9)"] : [])
+            ];
+            total.textContent = `$${amount}`;
+            totalLabel.textContent = usesBundle ? "All three · bundle preview" : items.length === 1 ? "Core tool" : "Core + selected add-on";
+            bundleNote.hidden = !usesBundle;
+            const body = [
+                "Hi, I'm interested in the proposed $19 Rental Profit Snapshot.",
+                "",
+                `My proposed selection: ${items.join(", ")}.`,
+                `Displayed proposed total: $${amount}${usesBundle ? " (includes the proposed $29 bundle discount)" : ""}.`,
+                "",
+                "Please let me know when it is available."
+            ].join("\n");
+            const subject = encodeURIComponent("Rental Profit Snapshot early access");
+            interestLink.href = `mailto:alexander.sabo.business@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+        }
 
-        document.querySelectorAll("[data-open-checkout]").forEach(button => {
-            button.addEventListener("click", () => checkoutDialog.showModal());
-        });
-
-        document.querySelectorAll("[data-close-checkout]").forEach(button => {
-            button.addEventListener("click", () => checkoutDialog.close());
-        });
-
-        checkoutDialog.addEventListener("click", event => {
-            if (event.target === checkoutDialog) checkoutDialog.close();
-        });
-
-        checkoutDialog.addEventListener("close", () => {
-            checkoutForm.reset();
-            checkoutForm.hidden = false;
-            checkoutSuccess.hidden = true;
-        });
-
-        checkoutForm.addEventListener("submit", event => {
-            event.preventDefault();
-            if (!checkoutForm.reportValidity()) return;
-            checkoutForm.hidden = true;
-            checkoutSuccess.hidden = false;
-        });
+        turnoverChoice.addEventListener("change", updateCart);
+        messagesChoice.addEventListener("change", updateCart);
+        updateCart();
 
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {

@@ -66,8 +66,8 @@
       ]
     },
     {
-      "name": "Focus Field Guide",
-      "short_name": "Field Guide",
+      "name": "Rental Profit Snapshot",
+      "short_name": "Rental Snapshot",
       "url": "./guide.html",
       "icons": [
         {

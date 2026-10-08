@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#14201d">
+    <meta name="description" content="Editable, copy-ready guest arrival and stay message templates for short-term-rental hosts.">
+    <title>Guest-Arrival Message Pack — Editable templates</title>
+    <style>
+        :root { color-scheme: light; --ink:#182722; --muted:#52635b; --line:#d6e0d9; --mint:#dff4eb; --paper:#f6f8f5; }
+        * { box-sizing:border-box; }
+        body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+        main { width:min(920px,calc(100% - 32px)); margin:28px auto; }
+        header,.message { padding:20px; border:1px solid var(--line); border-radius:14px; background:white; }
+        header { margin-bottom:15px; }
+        h1 { margin:0 0 8px; font-size:clamp(1.9rem,5vw,2.8rem); letter-spacing:-.05em; line-height:1.1; }
+        h2 { margin:0 0 10px; font-size:1.1rem; }
+        p { color:var(--muted); }
+        textarea,button { font:inherit; }
+        textarea { width:100%; min-height:116px; padding:10px; border:1px solid #aebbb3; border-radius:9px; resize:vertical; color:var(--ink); }
+        .message { margin:13px 0; }
+        .message-head { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+        button { min-height:40px; padding:7px 12px; border:1px solid #9aaca2; border-radius:9px; background:white; color:var(--ink); cursor:pointer; }
+        button:hover { background:var(--mint); }
+        .actions { margin:12px 0; }
+        .status { min-height:1.5em; font-size:.85rem; }
+        code { padding:2px 5px; border-radius:4px; background:var(--mint); }
+        @media(max-width:560px) { .message-head { align-items:flex-start; flex-direction:column; } }
+        @media print { body { background:white; } main { width:100%; margin:0; } button,.status { display:none; } .message { break-inside:avoid; } textarea { min-height:100px; border:0; padding:0; } }
+    </style>
+</head>
+<body>
+<main>
+    <header>
+        <p><strong>GUEST-ARRIVAL MESSAGE PACK</strong></p>
+        <h1>Helpful messages, in your own voice.</h1>
+        <p>Edit the drafts, replace bracketed placeholders, and copy only the details that match your listing and house rules. Changes are saved in this browser on this device.</p>
+        <p>Never include an access code or personal detail unless you have verified the recipient and the appropriate time to send it. Do not promise amenities, access, or services you have not confirmed.</p>
+        <div class="actions"><button id="print-button" type="button">Print / save PDF</button><button id="reset-button" type="button">Restore sample messages</button></div>
+        <p id="save-status" class="status" role="status">Messages are stored only in this browser.</p>
+    </header>
+    <div id="messages">
+        <article class="message"><div class="message-head"><h2>1. Booking confirmation</h2><button type="button" data-copy="booking">Copy message</button></div><label for="booking">Edit message</label><textarea id="booking">Hi [guest name], thanks for booking [property name] for [dates]. I’ll send the arrival details closer to check-in. If you have any questions before then, please message me here.</textarea></article>
+        <article class="message"><div class="message-head"><h2>2. Before-you-arrive check-in</h2><button type="button" data-copy="prearrival">Copy message</button></div><label for="prearrival">Edit message</label><textarea id="prearrival">Hi [guest name], we’re looking forward to hosting you on [arrival date]. Check-in starts at [time]. Please let me know your approximate arrival time and whether you need anything clarified before your stay.</textarea></article>
+        <article class="message"><div class="message-head"><h2>3. Arrival instructions</h2><button type="button" data-copy="arrival">Copy message</button></div><label for="arrival">Edit message</label><textarea id="arrival">Hi [guest name], the property is ready for your arrival after [time]. Address: [verified address]. Entry: [verified instructions]. Wi-Fi: [network and password]. If anything is unclear when you arrive, message me here.</textarea></article>
+        <article class="message"><div class="message-head"><h2>4. Welcome and essentials</h2><button type="button" data-copy="welcome">Copy message</button></div><label for="welcome">Edit message</label><textarea id="welcome">Welcome, [guest name] — I hope you have a comfortable stay. A few useful details: [heating / cooling instructions], [parking information], and [relevant house rule]. If something needs attention, please message me here.</textarea></article>
+        <article class="message"><div class="message-head"><h2>5. Gentle first-evening check-in</h2><button type="button" data-copy="checkin">Copy message</button></div><label for="checkin">Edit message</label><textarea id="checkin">Hi [guest name], just checking that you got settled in okay. If you need help with anything at the property, please send me a message and I’ll do my best to help.</textarea></article>
+        <article class="message"><div class="message-head"><h2>6. Reply when a guest reports an issue</h2><button type="button" data-copy="issue">Copy message</button></div><label for="issue">Edit message</label><textarea id="issue">Thanks for letting me know, [guest name]. I’m sorry this is causing trouble. I’m checking [issue] now and will update you by [specific time]. If there is an immediate safety concern, please use the appropriate local emergency contact.</textarea></article>
+        <article class="message"><div class="message-head"><h2>7. Mid-stay check-in</h2><button type="button" data-copy="midstay">Copy message</button></div><label for="midstay">Edit message</label><textarea id="midstay">Hi [guest name], I hope your stay is going well. Is there anything about the property or your plans that I can help with? No need to reply if everything is all set.</textarea></article>
+        <article class="message"><div class="message-head"><h2>8. Checkout reminder</h2><button type="button" data-copy="checkout">Copy message</button></div><label for="checkout">Edit message</label><textarea id="checkout">Hi [guest name], a quick reminder that checkout is by [time] on [date]. Before leaving, please [short, reasonable checkout steps from your listing]. Thank you for staying with us.</textarea></article>
+        <article class="message"><div class="message-head"><h2>9. Thank-you after checkout</h2><button type="button" data-copy="thanks">Copy message</button></div><label for="thanks">Edit message</label><textarea id="thanks">Thanks for staying at [property name], [guest name]. I hope you had a smooth trip home. If you have any private feedback about the stay, you’re welcome to share it with me here.</textarea></article>
+        <article class="message"><div class="message-head"><h2>10. Optional review request</h2><button type="button" data-copy="review">Copy message</button></div><label for="review">Edit message</label><textarea id="review">Thank you again for choosing [property name]. If you have a moment, you can share an honest review through [booking platform]. Your feedback helps future guests understand what to expect.</textarea></article>
+    </div>
+    <p>These are communication starting points, not a guarantee of ratings or guest outcomes. Follow the booking platform's rules and your local requirements.</p>
+</main>
+<script>
+    "use strict";
+    const storageKey = "guest-arrival-message-pack-v1";
+    const textareas = [...document.querySelectorAll("textarea")];
+    const status = document.getElementById("save-status");
+    function persist() {
+        const messages = Object.fromEntries(textareas.map(area => [area.id, area.value]));
+        try {
+            localStorage.setItem(storageKey, JSON.stringify(messages));
+            status.textContent = "Changes saved locally in this browser.";
+        } catch (error) {
+            status.textContent = `Could not save messages locally: ${error.message}`;
+        }
+    }
+    try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        textareas.forEach(area => {
+            if (typeof saved[area.id] === "string") area.value = saved[area.id];
+        });
+    } catch (error) {
+        status.textContent = `Could not restore messages: ${error.message}`;
+    }
+    textareas.forEach(area => area.addEventListener("input", persist));
+    document.querySelectorAll("[data-copy]").forEach(button => {
+        button.addEventListener("click", async () => {
+            const area = document.getElementById(button.dataset.copy);
+            try {
+                await navigator.clipboard.writeText(area.value);
+                status.textContent = `${button.previousElementSibling?.textContent || "Message"} copied to clipboard.`;
+            } catch (error) {
+                status.textContent = `Could not copy the message: ${error.message}. Select and copy the text manually.`;
+            }
+        });
+    });
+    document.getElementById("print-button").addEventListener("click", () => window.print());
+    document.getElementById("reset-button").addEventListener("click", () => {
+        textareas.forEach(area => { area.value = area.defaultValue; });
+        persist();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101918">
+    <meta name="description" content="A research preview of a simple monthly profit check for independent short-term-rental hosts. No bookkeeping system, no daily tracking.">
+    <title>Rental Profit Snapshot — Know what your rental kept</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #101918;
+            --surface: #172321;
+            --surface-soft: #1c2927;
+            --text: #f4f4ed;
+            --muted: #a6b4ae;
+            --line: rgba(230, 245, 238, .12);
+            --mint: #89ead5;
+            --mint-dark: #163b35;
+            --amber: #f3c28b;
+            --content: 1140px;
+            --radius: 22px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            min-width: 320px;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 78% 7%, rgba(72, 158, 141, .18), transparent 32rem),
+                radial-gradient(ellipse at 9% 49%, rgba(243, 194, 139, .055), transparent 27rem),
+                var(--bg);
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--mint);
+            outline-offset: 4px;
+        }
+
+        .container {
+            width: min(calc(100% - 40px), var(--content));
+            margin-inline: auto;
+        }
+
+        .topbar {
+            position: sticky;
+            z-index: 5;
+            top: 0;
+            border-bottom: 1px solid var(--line);
+            background: rgba(16, 25, 24, .88);
+            backdrop-filter: blur(16px);
+        }
+
+        .nav {
+            display: flex;
+            min-height: 70px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: .83rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 31px;
+            height: 31px;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--mint);
+            color: #10201d;
+        }
+
+        .brand-mark svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .nav-note {
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, .95fr) minmax(390px, 1.05fr);
+            align-items: center;
+            gap: clamp(38px, 7vw, 86px);
+            padding-block: clamp(54px, 8vw, 96px) 82px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 20px;
+            color: var(--mint);
+            font-size: .76rem;
+            font-weight: 780;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            content: "";
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            max-width: 650px;
+            margin-bottom: 20px;
+            font-size: clamp(2.7rem, 6vw, 5.15rem);
+            font-weight: 740;
+            letter-spacing: -.065em;
+            line-height: 1.02;
+        }
+
+        h1 span {
+            color: var(--mint);
+        }
+
+        .hero-copy {
+            max-width: 530px;
+            color: var(--muted);
+            font-size: 1.08rem;
+        }
+
+        .hero-copy strong {
+            color: var(--text);
+            font-weight: 650;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-top: 27px;
+        }
+
+        .button {
+            display: inline-flex;
+            min-height: 48px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 18px;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            font-size: .9rem;
+            font-weight: 760;
+            transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: var(--mint);
+            color: #10201d;
+        }
+
+        .button-primary:hover {
+            background: #a8f2e3;
+        }
+
+        .button-secondary {
+            border-color: var(--line);
+            background: rgba(255, 255, 255, .025);
+            color: var(--text);
+        }
+
+        .button-secondary:hover {
+            border-color: rgba(137, 234, 213, .55);
+        }
+
+        .trust-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px 19px;
+            margin: 23px 0 0;
+            color: var(--muted);
+            font-size: .78rem;
+        }
+
+        .trust-line span::before {
+            margin-right: 7px;
+            color: var(--mint);
+            content: "✓";
+        }
+
+        .demo-card {
+            overflow: hidden;
+            border: 1px solid rgba(137, 234, 213, .2);
+            border-radius: var(--radius);
+            background: linear-gradient(155deg, rgba(31, 48, 44, .97), rgba(19, 29, 28, .98));
+            box-shadow: 0 30px 100px rgba(0, 0, 0, .28);
+        }
+
+        .demo-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 21px 23px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .demo-title {
+            margin: 0;
+            font-size: .94rem;
+            font-weight: 730;
+        }
+
+        .demo-label {
+            margin: 3px 0 0;
+            color: var(--muted);
+            font-size: .73rem;
+        }
+
+        .currency-field {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: .74rem;
+        }
+
+        select,
+        input {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #111b19;
+            color: var(--text);
+        }
+
+        select {
+            min-height: 36px;
+            padding: 0 28px 0 10px;
+        }
+
+        .demo-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 19px;
+            padding: 23px;
+        }
+
+        .field-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .field {
+            display: grid;
+            gap: 6px;
+        }
+
+        .field label {
+            color: #d1dbd6;
+            font-size: .75rem;
+            font-weight: 610;
+        }
+
+        .field input {
+            width: 100%;
+            min-height: 42px;
+            padding: 0 11px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .field input:focus,
+        select:focus {
+            border-color: var(--mint);
+        }
+
+        .result-panel {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            padding: 17px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: rgba(8, 15, 14, .5);
+        }
+
+        .result-caption {
+            margin: 0;
+            color: var(--muted);
+            font-size: .72rem;
+        }
+
+        .result-number {
+            display: block;
+            margin: 4px 0 2px;
+            color: var(--mint);
+            font-size: clamp(1.55rem, 3vw, 2.25rem);
+            font-weight: 770;
+            letter-spacing: -.055em;
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .result-margin {
+            margin: 0;
+            color: var(--muted);
+            font-size: .73rem;
+        }
+
+        .bar-chart {
+            display: grid;
+            gap: 11px;
+            margin-top: auto;
+            padding-top: 21px;
+        }
+
+        .bar-row {
+            display: grid;
+            grid-template-columns: 72px minmax(0, 1fr);
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: .69rem;
+        }
+
+        .bar-track {
+            height: 7px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, .09);
+        }
+
+        .bar-fill {
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--mint);
+            transition: width 180ms ease;
+        }
+
+        .bar-fill-costs {
+            background: var(--amber);
+        }
+
+        .demo-foot {
+            padding: 13px 23px 16px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: .71rem;
+        }
+
+        .demo-foot strong {
+            color: #d8e9e4;
+        }
+
+        .section {
+            padding-block: 75px;
+            border-top: 1px solid var(--line);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 35px;
+            margin-bottom: 29px;
+        }
+
+        .section-kicker {
+            margin-bottom: 9px;
+            color: var(--mint);
+            font-size: .73rem;
+            font-weight: 780;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            max-width: 760px;
+            margin-bottom: 0;
+            font-size: clamp(1.9rem, 4vw, 3.15rem);
+            letter-spacing: -.05em;
+            line-height: 1.1;
+        }
+
+        .section-intro {
+            max-width: 440px;
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: .92rem;
+        }
+
+        .steps,
+        .format-grid,
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .step,
+        .format-card,
+        .product-card {
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            background: rgba(255, 255, 255, .025);
+        }
+
+        .step-number {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            margin-bottom: 18px;
+            place-items: center;
+            border: 1px solid rgba(137, 234, 213, .3);
+            border-radius: 11px;
+            color: var(--mint);
+            font-size: .78rem;
+            font-weight: 750;
+        }
+
+        .step h3,
+        .format-card h3,
+        .product-card h3 {
+            margin-bottom: 7px;
+            font-size: 1rem;
+            letter-spacing: -.02em;
+        }
+
+        .step p,
+        .format-card p,
+        .product-card p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: .84rem;
+        }
+
+        .format-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .format-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 190px;
+        }
+
+        .format-card::after {
+            position: absolute;
+            right: -31px;
+            bottom: -56px;
+            width: 155px;
+            height: 155px;
+            border: 1px solid rgba(137, 234, 213, .12);
+            border-radius: 50%;
+            box-shadow: 0 0 0 18px rgba(137, 234, 213, .025), 0 0 0 38px rgba(137, 234, 213, .02);
+            content: "";
+            pointer-events: none;
+        }
+
+        .format-icon {
+            display: grid;
+            width: 37px;
+            height: 37px;
+            margin-bottom: 17px;
+            place-items: center;
+            border-radius: 12px;
+            background: rgba(137, 234, 213, .1);
+            color: var(--mint);
+        }
+
+        .format-icon svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .sheet-preview {
+            overflow: hidden;
+            margin-top: 22px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #121d1b;
+        }
+
+        .sheet-title {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            color: var(--muted);
+            font-size: .7rem;
+        }
+
+        .sheet-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            padding: 9px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, .055);
+            font-size: .74rem;
+        }
+
+        .sheet-row:last-child {
+            border: 0;
+            color: var(--mint);
+            font-weight: 730;
+        }
+
+        .sheet-row span:last-child {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .product-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .product-grid {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .product-card {
+            display: flex;
+            min-height: 190px;
+            flex-direction: column;
+            align-items: start;
+        }
+
+        .product-card .tag {
+            display: inline-flex;
+            margin-bottom: 16px;
+            padding: 5px 9px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--mint);
+            font-size: .65rem;
+            font-weight: 730;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .price-hypothesis {
+            margin-top: auto;
+            padding-top: 19px;
+            color: var(--text);
+            font-size: .82rem;
+            font-weight: 740;
+        }
+
+        .bundle-card {
+            border-color: rgba(137, 234, 213, .3);
+            background: linear-gradient(145deg, rgba(31, 57, 51, .65), rgba(255, 255, 255, .025));
+        }
+
+        .validation {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 35px;
+            padding: clamp(25px, 5vw, 47px);
+            border: 1px solid rgba(137, 234, 213, .24);
+            border-radius: var(--radius);
+            background: linear-gradient(120deg, rgba(137, 234, 213, .09), rgba(255, 255, 255, .025));
+        }
+
+        .validation h2 {
+            margin-bottom: 12px;
+            font-size: clamp(1.75rem, 3.2vw, 2.6rem);
+        }
+
+        .validation p {
+            max-width: 700px;
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: .9rem;
+        }
+
+        .fine-print {
+            max-width: 780px;
+            margin: 20px auto 0;
+            color: #82918b;
+            font-size: .7rem;
+            text-align: center;
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding-block: 25px 35px;
+            color: var(--muted);
+            font-size: .75rem;
+        }
+
+        .footer a {
+            color: var(--mint);
+        }
+
+        @media (max-width: 920px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .hero-copy {
+                max-width: 660px;
+            }
+
+            .demo-card {
+                width: min(100%, 680px);
+            }
+
+            .section-heading {
+                align-items: start;
+                flex-direction: column;
+                gap: 13px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                width: min(calc(100% - 30px), var(--content));
+            }
+
+            .nav {
+                min-height: 62px;
+            }
+
+            .nav-note {
+                max-width: 165px;
+                text-align: right;
+            }
+
+            .hero {
+                padding-block: 48px 60px;
+            }
+
+            h1 {
+                font-size: clamp(2.5rem, 12vw, 4rem);
+            }
+
+            .demo-body {
+                grid-template-columns: 1fr;
+                padding: 17px;
+            }
+
+            .field-list {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .result-panel {
+                min-height: 220px;
+            }
+
+            .steps,
+            .product-grid,
+            .format-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding-block: 55px;
+            }
+
+            .validation {
+                grid-template-columns: 1fr;
+                gap: 22px;
+            }
+
+            .validation .button {
+                justify-self: start;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .field-list {
+                grid-template-columns: 1fr;
+            }
+
+            .currency-field span {
+                display: none;
+            }
+
+            .button-row .button {
+                width: 100%;
+            }
+
+            .footer {
+                align-items: start;
+                flex-direction: column;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <nav class="nav container" aria-label="Main navigation">
+            <a class="brand" href="./index.html" aria-label="Gehrman Sparrow portfolio">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 17V7l7 7 7-7v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                Rental Profit Snapshot
+            </a>
+            <span class="nav-note">Free research preview · Not for sale yet</span>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero container" aria-labelledby="hero-title">
+            <div>
+                <p class="eyebrow">A monthly money check for independent hosts</p>
+                <h1 id="hero-title">Your payout isn't your profit. <span>See what stayed.</span></h1>
+                <p class="hero-copy">
+                    A quick, low-fuss way for <strong>small short-term-rental hosts</strong> to estimate what's left
+                    after platform fees, cleaning and running costs—without turning bookkeeping into another job.
+                </p>
+                <div class="button-row">
+                    <a class="button button-primary" href="#preview">Try the live preview <span aria-hidden="true">↓</span></a>
+                    <a class="button button-secondary" href="mailto:gehrmansparrow@gmail.com?subject=Rental%20Profit%20Snapshot%20research&body=I%27m%20interested%20in%20the%20proposed%20%2419%20beta.%0A%0AThe%20part%20I%20need%20help%20with%20most%20is%3A%0A%0AI%20currently%20work%20it%20out%20by%3A">
+                        Share a 1-minute opinion
+                    </a>
+                </div>
+                <p class="trust-line">
+                    <span>No account</span>
+                    <span>No connected bank</span>
+                    <span>No daily logging</span>
+                </p>
+            </div>
+
+            <article class="demo-card" id="preview" aria-labelledby="demo-heading">
+                <div class="demo-top">
+                    <div>
+                        <h2 class="demo-title" id="demo-heading">A quick month-end estimate</h2>
+                        <p class="demo-label">Sample numbers — change any amount to try it</p>
+                    </div>
+                    <label class="currency-field" for="currency">
+                        <span>Currency</span>
+                        <select id="currency" aria-label="Currency">
+                            <option value="USD" selected>USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="HUF">HUF</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="demo-body">
+                    <div class="field-list">
+                        <div class="field">
+                            <label for="revenue">Booking revenue before payout</label>
+                            <input id="revenue" type="number" min="0" step="0.01" value="4200" inputmode="decimal" required>
+                        </div>
+                        <div class="field">
+                            <label for="fees">Platform fees</label>
+                            <input id="fees" type="number" min="0" step="0.01" value="126" inputmode="decimal" required>
+                        </div>
+                        <div class="field">
+                            <label for="cleaning">Cleaning / turnovers (enter 0 if none)</label>
+                            <input id="cleaning" type="number" min="0" step="0.01" value="540" inputmode="decimal" required>
+                        </div>
+                        <div class="field">
+                            <label for="other-costs">Other costs (enter 0 if none)</label>
+                            <input id="other-costs" type="number" min="0" step="0.01" value="625" inputmode="decimal" required>
+                        </div>
+                    </div>
+                    <div class="result-panel" aria-live="polite" aria-atomic="true">
+                        <p class="result-caption">Estimated left after listed costs</p>
+                        <output class="result-number" id="net-result" for="revenue fees cleaning other-costs">$2,909</output>
+                        <p class="result-margin" id="margin-result">69.3% of booking revenue</p>
+                        <div class="bar-chart" aria-label="Revenue and listed costs comparison">
+                            <div class="bar-row">
+                                <span>Revenue</span>
+                                <div class="bar-track"><div class="bar-fill" id="revenue-bar"></div></div>
+                            </div>
+                            <div class="bar-row">
+                                <span>Listed costs</span>
+                                <div class="bar-track"><div class="bar-fill bar-fill-costs" id="costs-bar"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-foot">
+                    <strong>Private by design:</strong> this preview calculates in your browser tab. It does not upload or save your numbers.
+                </div>
+            </article>
+        </section>
+
+        <section class="section" aria-labelledby="how-title">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">Made to be finished</p>
+                        <h2 id="how-title">Four totals in. One useful answer out.</h2>
+                    </div>
+                    <p class="section-intro">The proposed product is deliberately smaller than a bookkeeping system. It is a monthly check-in, not a new habit to maintain every day.</p>
+                </div>
+                <div class="steps">
+                    <article class="step">
+                        <span class="step-number">01</span>
+                        <h3>Take the month's totals</h3>
+                        <p>Use the booking revenue, platform fees and cleaning totals you already have. No account connection or CSV setup in this preview.</p>
+                    </article>
+                    <article class="step">
+                        <span class="step-number">02</span>
+                        <h3>Add running costs</h3>
+                        <p>Enter the other costs you want counted, such as supplies, utilities or repairs. Skip categories that don't apply.</p>
+                    </article>
+                    <article class="step">
+                        <span class="step-number">03</span>
+                        <h3>See the simple result</h3>
+                        <p>Compare listed costs with revenue and estimate what's left. No tax, mortgage or profitability promises hidden in the calculation.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="formats-title">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">Two ways to use the same check</p>
+                        <h2 id="formats-title">Pick the format that feels easiest.</h2>
+                    </div>
+                    <p class="section-intro">Both formats are planned around the same minimal inputs. These are previews, not downloadable products yet.</p>
+                </div>
+                <div class="format-grid">
+                    <article class="format-card">
+                        <span class="format-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                                <path d="M8 21h8m-4-3v3m-5-8 3-3 2 2 4-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <h3>Browser mini-tool</h3>
+                        <p>Open a page and do the check. No installation or sign-in. The planned version will keep the figures on your device.</p>
+                    </article>
+                    <article class="format-card">
+                        <span class="format-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                                <path d="M3 9h18M9 3v18m6-18v18M3 15h18" stroke="currentColor" stroke-width="1.3"/>
+                            </svg>
+                        </span>
+                        <h3>Sheets / Excel companion</h3>
+                        <p>Use the same short check in a familiar spreadsheet—without a maze of tabs or a long setup tutorial.</p>
+                        <div class="sheet-preview" role="img" aria-label="Illustrative spreadsheet preview with four inputs and a calculated estimate">
+                            <div class="sheet-title">MONTHLY SNAPSHOT · sample USD</div>
+                            <div class="sheet-row"><span>Booking revenue</span><span>$4,200</span></div>
+                            <div class="sheet-row"><span>Platform fees + cleaning + other</span><span>−$1,291</span></div>
+                            <div class="sheet-row"><span>Estimated left</span><span>$2,909</span></div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="suite-title">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">A small toolkit, if hosts want it</p>
+                        <h2 id="suite-title">Useful add-ons—not a pile of templates.</h2>
+                    </div>
+                    <p class="section-intro">These are pricing hypotheses for future tests. Nothing in this toolkit is available to buy today.</p>
+                </div>
+                <div class="product-grid">
+                    <article class="product-card">
+                        <span class="tag">Possible core product</span>
+                        <h3>Monthly Profit Snapshot</h3>
+                        <p>The four-number monthly estimate, in the browser and a matching workbook. Designed for owner-operators with a small number of rentals.</p>
+                        <span class="price-hypothesis">Test price: $19 one-time</span>
+                    </article>
+                    <article class="product-card">
+                        <span class="tag">Potential add-on</span>
+                        <h3>Turnover Handoff Kit</h3>
+                        <p>A cleaner-ready reset checklist, restock notes and a simple ready-for-arrival sign-off—adapted per property.</p>
+                        <span class="price-hypothesis">Test price: $9</span>
+                    </article>
+                    <article class="product-card">
+                        <span class="tag">Potential add-on</span>
+                        <h3>Guest Arrival Message Pack</h3>
+                        <p>Short, editable check-in and arrival messages with clear fill-in fields for each property—ready to copy, not a giant script library.</p>
+                        <span class="price-hypothesis">Test price: $9</span>
+                    </article>
+                    <article class="product-card bundle-card">
+                        <span class="tag">Potential bundle</span>
+                        <h3>Host Month-End + Guest-Ready Bundle</h3>
+                        <p>The profit check plus the turnover kit and a concise guest-arrival message pack, only if host research confirms they belong together.</p>
+                        <span class="price-hypothesis">Test price: $29 bundle</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="research-title">
+            <div class="container">
+                <div class="validation">
+                    <div>
+                        <p class="section-kicker">Research preview · no order is being taken</p>
+                        <h2 id="research-title">Would this make month-end easier for you?</h2>
+                        <p>Tell me what you host, how you work out what's left today, and whether a $19 one-time version feels worth testing. Your email app opens with a draft; nothing is subscribed or charged.</p>
+                    </div>
+                    <a class="button button-primary" href="mailto:gehrmansparrow@gmail.com?subject=Rental%20Profit%20Snapshot%20beta&body=I%27m%20interested%20in%20the%20research%20preview%2C%20not%20placing%20an%20order.%0A%0AI%20manage%3A%20%5Bnumber%20and%20type%20of%20rental%5D%0A%0AI%20currently%20work%20out%20monthly%20profit%20by%3A%0A%0AThe%20most%20annoying%20part%20is%3A%0A%0AAt%20a%20proposed%20%2419%20one-time%20price%2C%20I%20would%20be%3A%20%5Binterested%20%2F%20not%20interested%20%2F%20unsure%5D">
+                        Share feedback <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+                <p class="fine-print">Research concept only. The live calculator is an illustration, not bookkeeping or tax software. It only subtracts the costs entered here; results are estimates, not accounting, tax, legal or investment advice. Airbnb and Vrbo are trademarks of their respective owners. This independent concept is not affiliated with or endorsed by them.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer container">
+        <span>Rental Profit Snapshot · a Gehrman Sparrow research concept</span>
+        <a href="./index.html">Back to portfolio</a>
+    </footer>
+
+    <script>
+        const inputIds = ["revenue", "fees", "cleaning", "other-costs"];
+        const inputs = inputIds.map(id => document.getElementById(id));
+        const currencySelect = document.getElementById("currency");
+        const netResult = document.getElementById("net-result");
+        const marginResult = document.getElementById("margin-result");
+        const revenueBar = document.getElementById("revenue-bar");
+        const costsBar = document.getElementById("costs-bar");
+
+        function formatMoney(amount) {
+            return new Intl.NumberFormat("en", {
+                style: "currency",
+                currency: currencySelect.value,
+                maximumFractionDigits: currencySelect.value === "HUF" ? 0 : 2
+            }).format(amount);
+        }
+
+        function updateSnapshot() {
+            const invalidInput = inputs.findIndex((input, index) => {
+                const amount = input.valueAsNumber;
+                const invalid = input.value.trim() === "" || !Number.isFinite(amount) || amount < 0;
+                if (invalid) {
+                    input.setAttribute("aria-invalid", "true");
+                } else {
+                    input.removeAttribute("aria-invalid");
+                }
+                return invalid;
+            });
+            if (invalidInput !== -1) {
+                netResult.value = "Check the amounts";
+                netResult.textContent = "Check the amounts";
+                marginResult.textContent = "Enter zero or a positive number in each field.";
+                revenueBar.style.width = "0%";
+                costsBar.style.width = "0%";
+                return;
+            }
+            const amounts = inputs.map(input => input.valueAsNumber);
+            const [revenue, fees, cleaning, otherCosts] = amounts;
+            const costs = fees + cleaning + otherCosts;
+            const net = revenue - costs;
+            const margin = revenue > 0 ? (net / revenue) * 100 : 0;
+            const revenueScale = Math.max(revenue, costs, 1);
+
+            netResult.value = formatMoney(net);
+            netResult.textContent = formatMoney(net);
+            marginResult.textContent = `${margin.toFixed(1)}% of booking revenue`;
+            revenueBar.style.width = `${Math.min(100, (revenue / revenueScale) * 100)}%`;
+            costsBar.style.width = `${Math.min(100, (costs / revenueScale) * 100)}%`;
+        }
+
+        inputs.forEach(input => input.addEventListener("input", updateSnapshot));
+        currencySelect.addEventListener("change", updateSnapshot);
+        updateSnapshot();
+    </script>
+</body>
+</html>
