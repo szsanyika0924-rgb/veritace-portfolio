@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0b0c10">
     <meta name="description" content="Személyes portfólió és bemutatkozó oldal.">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" href="./nexus-icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" sizes="192x192" href="./nexus-icon-192.png">
     <title>Portfólió — Gehrman Sparrow</title>
     <style>
         :root {
@@ -899,5 +902,13 @@
         <span class="footer-mark">Gehrman Sparrow</span>
         <span>Gondosan készítve, 2026</span>
     </footer>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./sw.js")
+                    .catch(error => console.error("Service Worker registration failed:", error));
+            });
+        }
+    </script>
 </body>
 </html>

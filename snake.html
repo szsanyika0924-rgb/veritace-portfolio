@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0c10">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" href="./nexus-icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" sizes="192x192" href="./nexus-icon-192.png">
     <title>Modern Kígyós Játék - AI</title>
     <style>
         body {
@@ -267,6 +271,14 @@
             gameOverScreen.style.display = "none";
             clearInterval(gameInterval);
             gameInterval = setInterval(gameLoop, Number(difficultyElement.value));
+        }
+    </script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./sw.js")
+                    .catch(error => console.error("Service Worker registration failed:", error));
+            });
         }
     </script>
 </body>
