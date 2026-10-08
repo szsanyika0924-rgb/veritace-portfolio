@@ -64,6 +64,18 @@
           "type": "image/svg+xml"
         }
       ]
+    },
+    {
+      "name": "Focus Field Guide",
+      "short_name": "Field Guide",
+      "url": "./guide.html",
+      "icons": [
+        {
+          "src": "./nexus-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
     }
   ]
 }
