@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0c10">
+    <meta name="description" content="Személyes portfólió és bemutatkozó oldal.">
+    <title>Portfólió — Gehrman Sparrow</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --background: #0b0c10;
+            --surface: #111319;
+            --surface-raised: #171920;
+            --text: #f4f3ef;
+            --muted: #92939d;
+            --line: rgba(255, 255, 255, 0.09);
+            --accent: #d3ff71;
+            --accent-dark: #a5d747;
+            --violet: #9c8cff;
+            --content-width: 1120px;
+            --radius: 22px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 92px;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 82% 12%, rgba(156, 140, 255, 0.09), transparent 32rem),
+                var(--background);
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 5px;
+            border-radius: 4px;
+        }
+
+        .container {
+            width: min(calc(100% - 48px), var(--content-width));
+            margin-inline: auto;
+        }
+
+        .site-header {
+            position: sticky;
+            z-index: 10;
+            top: 0;
+            border-bottom: 1px solid var(--line);
+            background: rgba(11, 12, 16, 0.78);
+            backdrop-filter: blur(18px);
+        }
+
+        .nav {
+            display: flex;
+            min-height: 76px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 0.91rem;
+            font-weight: 750;
+            letter-spacing: 0.02em;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 34px;
+            aspect-ratio: 1;
+            place-items: center;
+            border-radius: 11px;
+            background: var(--accent);
+            color: #11150b;
+        }
+
+        .brand-mark svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: clamp(18px, 3vw, 38px);
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .nav-links a {
+            transition: color 160ms ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-links .nav-contact {
+            padding: 9px 15px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--text);
+        }
+
+        .hero {
+            display: grid;
+            min-height: 660px;
+            grid-template-columns: 1.08fr 0.92fr;
+            align-items: center;
+            gap: clamp(40px, 8vw, 100px);
+            padding-block: 100px 112px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.77rem;
+            font-weight: 650;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 14px rgba(211, 255, 113, 0.55);
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        .hero h1 {
+            max-width: 670px;
+            margin-block: 25px 20px;
+            font-size: clamp(3.1rem, 7.1vw, 6.35rem);
+            font-weight: 680;
+            letter-spacing: -0.075em;
+            line-height: 0.99;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero-role {
+            margin: -7px 0 18px;
+            color: var(--text);
+            font-size: clamp(1.05rem, 2vw, 1.3rem);
+            font-weight: 620;
+            letter-spacing: -0.025em;
+        }
+
+        .hero-copy {
+            max-width: 520px;
+            margin-bottom: 31px;
+            color: var(--muted);
+            font-size: clamp(1rem, 1.6vw, 1.13rem);
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .button {
+            display: inline-flex;
+            min-height: 48px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 19px;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 720;
+            transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: var(--accent);
+            color: #14170e;
+        }
+
+        .button-primary:hover {
+            background: #e0ff9a;
+        }
+
+        .button-secondary {
+            border-color: var(--line);
+            color: var(--text);
+        }
+
+        .button-secondary:hover {
+            border-color: rgba(255, 255, 255, 0.24);
+        }
+
+        .button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero-art {
+            position: relative;
+            min-height: 420px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background:
+                radial-gradient(ellipse at 50% 45%, rgba(156, 140, 255, 0.16), transparent 52%),
+                linear-gradient(145deg, #191a24, #101116 72%);
+            isolation: isolate;
+        }
+
+        .hero-art::before,
+        .hero-art::after {
+            position: absolute;
+            z-index: -1;
+            width: 260px;
+            aspect-ratio: 1;
+            border: 1px solid rgba(255, 255, 255, 0.075);
+            border-radius: 50%;
+            content: "";
+        }
+
+        .hero-art::before {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .hero-art::after {
+            top: 50%;
+            left: 50%;
+            width: 360px;
+            transform: translate(-50%, -50%);
+        }
+
+        .art-grid {
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+            background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+            background-position: center;
+            background-size: 42px 42px;
+            mask-image: linear-gradient(transparent, black 22%, black 78%, transparent);
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: min(66%, 270px);
+            aspect-ratio: 1;
+            border: 1px solid rgba(211, 255, 113, 0.34);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) rotate(-28deg) scaleY(0.42);
+        }
+
+        .orbit.orbit-two {
+            width: min(81%, 340px);
+            border-color: rgba(156, 140, 255, 0.42);
+            transform: translate(-50%, -50%) rotate(48deg) scaleY(0.42);
+        }
+
+        .art-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: grid;
+            width: 128px;
+            aspect-ratio: 1;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.26);
+            border-radius: 36px;
+            background: linear-gradient(145deg, rgba(211,255,113,.96), rgba(153,204,73,.87));
+            box-shadow: 0 0 90px rgba(211, 255, 113, 0.2), inset 0 1px rgba(255,255,255,.65);
+            color: #171b10;
+            transform: translate(-50%, -50%) rotate(-10deg);
+        }
+
+        .art-core svg {
+            width: 68px;
+            height: 68px;
+        }
+
+        .art-label {
+            position: absolute;
+            right: 22px;
+            bottom: 21px;
+            left: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .art-label span:last-child {
+            color: var(--accent);
+        }
+
+        .section {
+            padding-block: 96px;
+            border-top: 1px solid var(--line);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 42px;
+        }
+
+        .section-kicker {
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 0;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 630;
+            letter-spacing: -0.06em;
+            line-height: 1.1;
+        }
+
+        .section-note {
+            max-width: 310px;
+            margin-bottom: 2px;
+            color: var(--muted);
+            font-size: 0.91rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .about-card,
+        .value-card {
+            padding: clamp(24px, 4vw, 38px);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+        }
+
+        .about-card h3,
+        .value-card h3 {
+            margin-bottom: 13px;
+            font-size: 1.1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .about-card p,
+        .value-card p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .value-icon {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            margin-bottom: 22px;
+            place-items: center;
+            border: 1px solid rgba(211, 255, 113, 0.22);
+            border-radius: 14px;
+            background: rgba(211, 255, 113, 0.08);
+            color: var(--accent);
+        }
+
+        .value-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            display: block;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: inherit;
+            transition: transform 200ms ease, border-color 200ms ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .project-card:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 5px;
+        }
+
+        .project-art {
+            position: relative;
+            display: grid;
+            min-height: 245px;
+            overflow: hidden;
+            place-items: center;
+        }
+
+        .project-art svg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+        }
+
+        .project-art-one {
+            background: linear-gradient(135deg, #232b26, #111713);
+        }
+
+        .project-art-two {
+            background: linear-gradient(135deg, #29243b, #17151e);
+        }
+
+        .project-stamp {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            width: 112px;
+            aspect-ratio: 1;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 28px;
+            background: rgba(16, 19, 16, .72);
+            box-shadow: 0 22px 70px rgba(0,0,0,.27);
+            color: var(--accent);
+            transform: rotate(-8deg);
+            backdrop-filter: blur(12px);
+        }
+
+        .project-art-two .project-stamp {
+            border-radius: 50%;
+            background: rgba(25, 22, 38, .75);
+            color: #c2b8ff;
+            transform: rotate(8deg);
+        }
+
+        .project-stamp svg {
+            position: static;
+            width: 45px;
+            height: 45px;
+        }
+
+        .project-info {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 23px 25px 25px;
+        }
+
+        .project-info h3 {
+            margin-bottom: 5px;
+            font-size: 1.04rem;
+            letter-spacing: -0.025em;
+        }
+
+        .project-info p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: 0.83rem;
+        }
+
+        .project-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            color: var(--accent);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .project-launch:hover {
+            color: #e0ff9a;
+        }
+
+        .project-year {
+            display: inline-block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.76rem;
+        }
+
+        .project-number {
+            color: var(--muted);
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+        }
+
+        .contact-panel {
+            position: relative;
+            display: flex;
+            overflow: hidden;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            padding: clamp(30px, 6vw, 62px);
+            border: 1px solid rgba(211, 255, 113, 0.2);
+            border-radius: 28px;
+            background:
+                radial-gradient(ellipse at 92% 0%, rgba(211,255,113,.12), transparent 43%),
+                linear-gradient(130deg, #171a15, #121318 70%);
+        }
+
+        .contact-panel h2 {
+            margin-bottom: 12px;
+            font-size: clamp(2rem, 4.2vw, 3.5rem);
+            font-weight: 630;
+            letter-spacing: -0.065em;
+            line-height: 1.08;
+        }
+
+        .contact-panel p {
+            max-width: 440px;
+            margin-bottom: 0;
+            color: var(--muted);
+        }
+
+        .contact-spark {
+            position: absolute;
+            top: -51px;
+            right: 27%;
+            width: 145px;
+            height: 145px;
+            color: rgba(211, 255, 113, 0.16);
+            pointer-events: none;
+        }
+
+        .site-footer {
+            display: flex;
+            min-height: 90px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 96px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .footer-mark {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        @media (max-width: 760px) {
+            .hero {
+                min-height: auto;
+                grid-template-columns: 1fr;
+                gap: 48px;
+                padding-block: 78px 78px;
+            }
+
+            .hero-art {
+                min-height: 360px;
+            }
+
+            .section {
+                padding-block: 76px;
+            }
+
+            .section-heading {
+                align-items: start;
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .section-note {
+                max-width: 480px;
+            }
+
+            .site-footer {
+                margin-top: 76px;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .container {
+                width: min(calc(100% - 34px), var(--content-width));
+            }
+
+            .nav {
+                min-height: 68px;
+            }
+
+            .nav-links {
+                gap: 14px;
+                font-size: 0.78rem;
+            }
+
+            .nav-links .nav-contact {
+                padding: 7px 11px;
+            }
+
+            .nav-links a:nth-child(2) {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 67px;
+            }
+
+            .hero h1 {
+                font-size: clamp(3rem, 15vw, 4.7rem);
+            }
+
+            .hero-art {
+                min-height: 310px;
+                border-radius: 24px;
+            }
+
+            .art-core {
+                width: 104px;
+                border-radius: 30px;
+            }
+
+            .art-core svg {
+                width: 55px;
+                height: 55px;
+            }
+
+            .about-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-art {
+                min-height: 220px;
+            }
+
+            .contact-panel {
+                align-items: start;
+                flex-direction: column;
+            }
+
+            .contact-spark {
+                right: -20px;
+            }
+
+            .site-footer {
+                align-items: start;
+                flex-direction: column;
+                justify-content: center;
+                gap: 4px;
+                padding-block: 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav container" aria-label="Fő navigáció">
+            <a class="brand" href="#kezdo" aria-label="Vissza a kezdőlapra">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 17.5 12 5l6 12.5M8.2 13h7.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span>Gehrman Sparrow</span>
+            </a>
+            <div class="nav-links">
+                <a href="#rolam">Rólam</a>
+                <a href="#munkak">Munkáim</a>
+                <a class="nav-contact" href="#kapcsolat">Kapcsolat <span aria-hidden="true">↗</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero container" id="kezdo" aria-labelledby="hero-title">
+            <div>
+                <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Nyitott vagyok új lehetőségekre</div>
+                <h1 id="hero-title">Szia, <span>Gehrman Sparrow</span> vagyok.</h1>
+                <p class="hero-role">AI-Asszisztált Fejlesztő &amp; Szoftver Mágus</p>
+                <p class="hero-copy">Digitális ötletekből készítek átgondolt, szerethető élményeket. Itt találsz egy kis ízelítőt abból, ki vagyok és min dolgozom.</p>
+                <div class="hero-actions">
+                    <a class="button button-primary" href="snake.html">
+                        Nézd meg a munkáimat
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a class="button button-secondary" href="#rolam">Ismerj meg</a>
+                </div>
+            </div>
+
+            <div class="hero-art" role="img" aria-label="Absztrakt, geometrikus grafika világító formákkal">
+                <div class="art-grid" aria-hidden="true"></div>
+                <div class="orbit" aria-hidden="true"></div>
+                <div class="orbit orbit-two" aria-hidden="true"></div>
+                <div class="art-core" aria-hidden="true">
+                    <svg viewBox="0 0 72 72" fill="none">
+                        <path d="M18 52 36 16l18 36M25 40h22" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="54" cy="19" r="5" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="art-label"><span>Ötletből élmény</span><span>01 / 03</span></div>
+            </div>
+        </section>
+
+        <section class="section" id="rolam" aria-labelledby="about-title">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">Röviden rólam</p>
+                        <h2 id="about-title">Jó ötletek.<br>Gondos kivitelezés.</h2>
+                    </div>
+                    <p class="section-note">Szeretem, amikor a letisztult megjelenés mögött valódi figyelem és jól működő részletek vannak.</p>
+                </div>
+                <div class="about-grid">
+                    <article class="about-card">
+                        <h3>Ki vagyok?</h3>
+                        <p>[Írj ide néhány mondatot magadról: mivel foglalkozol, mi érdekel, és milyen tapasztalatot hozol a közös munkába.]</p>
+                    </article>
+                    <article class="value-card">
+                        <div class="value-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-2-5.8L4 11l6-2.2L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                <path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Amiben hiszek</h3>
+                        <p>Az egyszerű nem jelent unalmasat. A legjobb megoldások érthetőek, figyelmesek és a részleteikben is következetesek.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="munkak" aria-labelledby="work-title">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">Válogatott munkák</p>
+                        <h2 id="work-title">Ami eddig készült.</h2>
+                    </div>
+                    <p class="section-note">A mintakártyákat cseréld le a saját projektjeidre és azok rövid leírására.</p>
+                </div>
+                <div class="projects-grid">
+                    <a class="project-card" href="snake.html" aria-label="Neon Snake játék indítása">
+                        <div class="project-art project-art-one" role="img" aria-label="A Neon Snake játék zöld tónusú grafikája">
+                            <svg viewBox="0 0 600 300" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+                                <path d="M0 226c87-52 152-44 221 5s126 49 184-9 111-76 195-38v116H0V226Z" fill="#9acb60" fill-opacity=".13"/>
+                                <path d="M0 256c96-34 164-31 234 6 74 39 128 28 185-10 69-47 118-48 181-16" stroke="#d3ff71" stroke-opacity=".46" stroke-width="1.5"/>
+                                <circle cx="472" cy="75" r="43" stroke="#d3ff71" stroke-opacity=".4"/>
+                                <circle cx="472" cy="75" r="25" stroke="#d3ff71" stroke-opacity=".25"/>
+                                <path d="M0 0h600v300H0z" fill="url(#projectGlowOne)"/>
+                                <defs>
+                                    <linearGradient id="projectGlowOne" x1="75" y1="0" x2="461" y2="311" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#d3ff71" stop-opacity=".1"/>
+                                        <stop offset="1" stop-color="#d3ff71" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <span class="project-stamp" aria-hidden="true">
+                                <svg viewBox="0 0 48 48" fill="none">
+                                    <path d="M8 35 18 13l10 22M12 28h13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="35" cy="17" r="5" fill="currentColor" fill-opacity=".8"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="project-info">
+                            <div>
+                                <h3>Neon Snake</h3>
+                                <p>Modern, böngészőben játszható neon-ügyességi játék mentett rekordokkal és sebességfokozatokkal.</p>
+                                <span class="project-year">2026</span>
+                                <span class="project-launch">Játék indítása <span aria-hidden="true">↗</span></span>
+                            </div>
+                            <span class="project-number">01</span>
+                        </div>
+                    </a>
+
+                    <article class="project-card">
+                        <div class="project-art project-art-two" role="img" aria-label="Lila tónusú, absztrakt projektgrafika">
+                            <svg viewBox="0 0 600 300" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+                                <path d="M105 150h390M300-18v336M169 19l262 262M431 19 169 281" stroke="#b4a7ff" stroke-opacity=".2"/>
+                                <circle cx="300" cy="150" r="94" stroke="#b4a7ff" stroke-opacity=".38"/>
+                                <circle cx="300" cy="150" r="68" stroke="#b4a7ff" stroke-opacity=".24"/>
+                                <circle cx="300" cy="150" r="38" fill="#9c8cff" fill-opacity=".14" stroke="#c2b8ff" stroke-opacity=".6"/>
+                                <path d="M0 0h600v300H0z" fill="url(#projectGlowTwo)"/>
+                                <defs>
+                                    <radialGradient id="projectGlowTwo" cx="0" cy="0" r="1" gradientTransform="matrix(0 190 -380 0 300 150)" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#9c8cff" stop-opacity=".18"/>
+                                        <stop offset="1" stop-color="#9c8cff" stop-opacity="0"/>
+                                    </radialGradient>
+                                </defs>
+                            </svg>
+                            <span class="project-stamp" aria-hidden="true">
+                                <svg viewBox="0 0 48 48" fill="none">
+                                    <path d="M24 7v34M7 24h34M12 12l24 24M36 12 12 36" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="24" cy="24" r="7" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="project-info">
+                            <div>
+                                <h3>[Másik projekt]</h3>
+                                <p>[Rövid leírás · 2025]</p>
+                            </div>
+                            <span class="project-number">02</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="kapcsolat" aria-labelledby="contact-title">
+            <div class="container">
+                <div class="contact-panel">
+                    <svg class="contact-spark" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <path d="M60 4 69 47l39 13-39 13-9 43-9-43-39-13 39-13 9-43Z" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="60" cy="60" r="7" fill="currentColor"/>
+                    </svg>
+                    <div>
+                        <p class="section-kicker">Kapcsolat</p>
+                        <h2 id="contact-title">Van egy jó ötleted?</h2>
+                        <p>Írj pár sort arról, min dolgozol — szívesen beszélgetek róla.</p>
+                    </div>
+                    <a class="button button-primary" href="mailto:[email-cimed]">
+                        Írj nekem
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 17 17 7M7 7h10v10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer container">
+        <span class="footer-mark">Gehrman Sparrow</span>
+        <span>Gondosan készítve, 2026</span>
+    </footer>
+</body>
+</html>

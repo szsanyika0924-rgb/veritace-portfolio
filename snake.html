@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Kígyós Játék - AI</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #111119);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 10px rgba(0,242,254,0.2);
+        }
+        #score-board {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        #game-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 4px solid #4facfe;
+        }
+        canvas {
+            background-color: #1a1a24;
+            display: block;
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(17, 17, 25, 0.85);
+            backdrop-filter: blur(5px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ff4b5c;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        #start-menu {
+            display: flex;
+            position: absolute;
+            inset: 0;
+            background: rgba(17, 17, 25, 0.9);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+        #difficulty {
+            min-width: 180px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            background: #1a1a24;
+            color: #fff;
+            font: inherit;
+        }
+        .game-over-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .game-over-actions button {
+            padding-right: 16px;
+            padding-left: 16px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            border: none;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>NEON SNAKE</h1>
+    <div id="score-board">Pontszám: <span id="score">0</span> | Rekord: <span id="high-score">0</span></div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="start-menu">
+            <label for="difficulty">Nehézségi szint</label>
+            <select id="difficulty">
+                <option value="160">Lassú</option>
+                <option value="100" selected>Közepes</option>
+                <option value="60">Gyors</option>
+            </select>
+            <button onclick="startGame()">Játék indítása</button>
+        </div>
+        <div id="game-over">
+            JÁTÉK VÉGE
+            <div class="game-over-actions">
+                <button onclick="resetGame()">Új játék</button>
+                <button onclick="backToMenu()">Vissza a menübe</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreElement = document.getElementById("score");
+        const highScoreElement = document.getElementById("high-score");
+        const startMenu = document.getElementById("start-menu");
+        const difficultyElement = document.getElementById("difficulty");
+        const gameOverScreen = document.getElementById("game-over");
+
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+
+        let snake = [{x: 10, y: 10}];
+        let food = {x: 5, y: 5};
+        let dx = 1;
+        let dy = 0;
+        let score = 0;
+        let highScore = Number(localStorage.getItem("neonSnakeHighScore")) || 0;
+        let gameInterval;
+        let gameRunning = false;
+
+        highScoreElement.innerText = highScore;
+        window.addEventListener("keydown", changeDirection);
+
+        function startGame() {
+            startMenu.style.display = "none";
+            resetGame();
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            moveSnake();
+            if (checkCollision()) {
+                endGame();
+                return;
+            }
+            checkFoodEat();
+            draw();
+        }
+
+        function draw() {
+            // Háttér tisztítása mintával
+            ctx.fillStyle = "#1a1a24";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Kígyó kirajzolása neon effektusokkal
+            snake.forEach((part, index) => {
+                ctx.fillStyle = index === 0 ? "#00f2fe" : "#4facfe";
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "#00f2fe";
+                ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
+            });
+
+            // Étel kirajzolása
+            ctx.fillStyle = "#ff4b5c";
+            ctx.shadowColor = "#ff4b5c";
+            ctx.shadowBlur = 15;
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+            ctx.shadowBlur = 0; // Reset effekt
+        }
+
+        function moveSnake() {
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            snake.unshift(head);
+            snake.pop();
+        }
+
+        function changeDirection(event) {
+            if (!gameRunning) return;
+            const keyPressed = event.keyCode;
+            const LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40;
+
+            if (keyPressed === LEFT && dx === 0) { dx = -1; dy = 0; }
+            if (keyPressed === UP && dy === 0) { dx = 0; dy = -1; }
+            if (keyPressed === RIGHT && dx === 0) { dx = 1; dy = 0; }
+            if (keyPressed === DOWN && dy === 0) { dx = 0; dy = 1; }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+            // Falak ellenőrzése
+            if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) return true;
+            // Önmagának ütközés
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) return true;
+            }
+            return false;
+        }
+
+        function checkFoodEat() {
+            if (snake[0].x === food.x && snake[0].y === food.y) {
+                score += 10;
+                scoreElement.innerText = score;
+                if (score > highScore) {
+                    highScore = score;
+                    highScoreElement.innerText = highScore;
+                    localStorage.setItem("neonSnakeHighScore", highScore);
+                }
+                snake.push({}); // Növekszik a kígyó
+                generateFood();
+            }
+        }
+
+        function generateFood() {
+            food.x = Math.floor(Math.random() * tileCount);
+            food.y = Math.floor(Math.random() * tileCount);
+            // Ne generálódjon a kígyóra az étel
+            snake.forEach(part => {
+                if (part.x === food.x && part.y === food.y) generateFood();
+            });
+        }
+
+        function endGame() {
+            gameRunning = false;
+            clearInterval(gameInterval);
+            gameOverScreen.style.display = "flex";
+        }
+
+        function backToMenu() {
+            gameRunning = false;
+            clearInterval(gameInterval);
+            gameOverScreen.style.display = "none";
+            startMenu.style.display = "flex";
+        }
+
+        function resetGame() {
+            snake = [{x: 10, y: 10}, {x: 9, y: 10}];
+            generateFood();
+            dx = 1; dy = 0;
+            score = 0;
+            scoreElement.innerText = score;
+            gameRunning = true;
+            startMenu.style.display = "none";
+            gameOverScreen.style.display = "none";
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, Number(difficultyElement.value));
+        }
+    </script>
+</body>
+</html>
