@@ -993,6 +993,30 @@
         <span>Gondosan készítve, 2026</span>
     </footer>
     <script>
+        const portfolioScrollKey = "gehrmansPortfolioScrollY";
+
+        document.querySelectorAll(".projects-grid .project-card").forEach(card => {
+            card.addEventListener("click", () => {
+                sessionStorage.setItem(portfolioScrollKey, String(window.scrollY));
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedScrollY = sessionStorage.getItem(portfolioScrollKey);
+            if (savedScrollY === null) return;
+
+            const scrollY = Number(savedScrollY);
+            if (!Number.isFinite(scrollY) || scrollY < 0) {
+                sessionStorage.removeItem(portfolioScrollKey);
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                window.scrollTo({ top: scrollY, behavior: "smooth" });
+                sessionStorage.removeItem(portfolioScrollKey);
+            });
+        });
+
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker.register("./sw.js")
