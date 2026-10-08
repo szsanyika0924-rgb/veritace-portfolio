@@ -68,7 +68,7 @@
     {
       "name": "Rental Profit Snapshot",
       "short_name": "Rental Snapshot",
-      "url": "./guide.html",
+      "url": "./rental-profit.html",
       "icons": [
         {
           "src": "./nexus-icon.svg",
