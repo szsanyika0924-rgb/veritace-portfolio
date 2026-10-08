@@ -108,6 +108,91 @@
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
         }
+        #d-pad {
+            display: grid;
+            grid-template-areas:
+                ". up ."
+                "left . right"
+                ". down .";
+            grid-template-columns: repeat(3, 48px);
+            grid-template-rows: repeat(3, 48px);
+            gap: 4px;
+            padding: 10px;
+            margin-top: 16px;
+            border: 1px solid rgba(0, 242, 254, 0.35);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(20, 44, 46, 0.96), rgba(12, 18, 25, 0.96));
+            box-shadow: 0 0 24px rgba(0, 242, 254, 0.14), inset 0 0 18px rgba(0, 242, 254, 0.08);
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .direction-button {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            margin: 0;
+            padding: 0;
+            border: 1px solid rgba(0, 242, 254, 0.62);
+            border-radius: 15px;
+            background: linear-gradient(145deg, #17383b, #102329);
+            color: #b9fffb;
+            font-size: 1.45rem;
+            line-height: 1;
+            box-shadow: 0 3px 12px rgba(0, 242, 254, 0.16), inset 0 0 10px rgba(0, 242, 254, 0.08);
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 100ms ease, background 100ms ease, box-shadow 100ms ease;
+        }
+        .direction-button:active,
+        .direction-button.is-active {
+            transform: scale(0.9);
+            background: linear-gradient(145deg, #00c8b9, #087f7b);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.65), inset 0 0 12px rgba(255, 255, 255, 0.2);
+        }
+        .direction-button:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+        .direction-button[data-direction="up"] { grid-area: up; }
+        .direction-button[data-direction="left"] { grid-area: left; }
+        .direction-button[data-direction="right"] { grid-area: right; }
+        .direction-button[data-direction="down"] { grid-area: down; }
+        @media (max-width: 600px) {
+            body {
+                box-sizing: border-box;
+                min-height: 100vh;
+                min-height: 100svh;
+                height: auto;
+                justify-content: flex-start;
+                overflow-x: hidden;
+                overflow-y: auto;
+                padding: 10px 12px 20px;
+            }
+            h1 {
+                margin: 4px 0 8px;
+                font-size: clamp(1.8rem, 8vw, 2.5rem);
+            }
+            #score-board {
+                margin-bottom: 12px;
+                padding: 8px 14px;
+                font-size: 1rem;
+            }
+            #game-container {
+                max-width: 100%;
+                border-width: 3px;
+            }
+            canvas {
+                width: min(400px, calc(100vw - 38px), calc(100vh - 324px));
+                width: min(400px, calc(100vw - 38px), calc(100svh - 324px));
+                height: auto;
+            }
+            #d-pad {
+                margin-top: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -134,6 +219,12 @@
             </div>
         </div>
     </div>
+    <div id="d-pad" role="group" aria-label="Érintéses irányítás">
+        <button class="direction-button" type="button" data-direction="up" aria-label="Fel" title="Fel">▲</button>
+        <button class="direction-button" type="button" data-direction="left" aria-label="Balra" title="Balra">◀</button>
+        <button class="direction-button" type="button" data-direction="right" aria-label="Jobbra" title="Jobbra">▶</button>
+        <button class="direction-button" type="button" data-direction="down" aria-label="Le" title="Le">▼</button>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -157,7 +248,36 @@
         let gameRunning = false;
 
         highScoreElement.innerText = highScore;
-        window.addEventListener("keydown", changeDirection);
+        window.addEventListener("keydown", event => {
+            const directions = {
+                ArrowLeft: "left",
+                ArrowUp: "up",
+                ArrowRight: "right",
+                ArrowDown: "down"
+            };
+            const direction = directions[event.key];
+            if (direction) {
+                event.preventDefault();
+                changeDirection(direction);
+            }
+        });
+        document.querySelectorAll(".direction-button").forEach(button => {
+            button.addEventListener("touchstart", event => {
+                event.preventDefault();
+                button.classList.add("is-active");
+                changeDirection(button.dataset.direction);
+                if (navigator.vibrate) navigator.vibrate(12);
+            }, { passive: false });
+            button.addEventListener("touchend", () => button.classList.remove("is-active"));
+            button.addEventListener("touchcancel", () => button.classList.remove("is-active"));
+            button.addEventListener("mousedown", () => {
+                button.classList.add("is-active");
+                changeDirection(button.dataset.direction);
+            });
+            button.addEventListener("click", () => changeDirection(button.dataset.direction));
+            button.addEventListener("mouseup", () => button.classList.remove("is-active"));
+            button.addEventListener("mouseleave", () => button.classList.remove("is-active"));
+        });
 
         function startGame() {
             startMenu.style.display = "none";
@@ -202,15 +322,13 @@
             snake.pop();
         }
 
-        function changeDirection(event) {
+        function changeDirection(direction) {
             if (!gameRunning) return;
-            const keyPressed = event.keyCode;
-            const LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40;
 
-            if (keyPressed === LEFT && dx === 0) { dx = -1; dy = 0; }
-            if (keyPressed === UP && dy === 0) { dx = 0; dy = -1; }
-            if (keyPressed === RIGHT && dx === 0) { dx = 1; dy = 0; }
-            if (keyPressed === DOWN && dy === 0) { dx = 0; dy = 1; }
+            if (direction === "left" && dx === 0) { dx = -1; dy = 0; }
+            if (direction === "up" && dy === 0) { dx = 0; dy = -1; }
+            if (direction === "right" && dx === 0) { dx = 1; dy = 0; }
+            if (direction === "down" && dy === 0) { dx = 0; dy = 1; }
         }
 
         function checkCollision() {
