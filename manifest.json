@@ -66,6 +66,18 @@
       ]
     },
     {
+      "name": "The Focus Field Guide",
+      "short_name": "Focus Guide",
+      "url": "./guide.html",
+      "icons": [
+        {
+          "src": "./nexus-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
       "name": "Rental Profit Snapshot",
       "short_name": "Rental Snapshot",
       "url": "./rental-profit.html",
